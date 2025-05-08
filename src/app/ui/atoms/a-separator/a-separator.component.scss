@@ -1,0 +1,12 @@
+@import 'main';
+
+.a-separator {
+	margin: auto;
+	color: $separator;
+	font-size: 30px;
+	font-weight: lighter;
+
+	&__white {
+		color: $text-white;
+	}
+}

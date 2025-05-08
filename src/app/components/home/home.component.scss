@@ -1,0 +1,19 @@
+@import 'main';
+.home {
+	height: 90vh;
+	padding: 1.5rem;
+	&__footer {
+		padding: 1.5rem;
+		background-color: $background-white;
+	}
+
+	@include from($laptop) {
+		max-width: 50%;
+		margin: auto;
+		height: 91vh;
+	}
+
+	@include from($laptop-large) {
+		max-width: 35%;
+	}
+}

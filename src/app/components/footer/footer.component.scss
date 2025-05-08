@@ -1,0 +1,14 @@
+@import 'main';
+.footer {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	background-color: $background-white;
+	gap: 2rem;
+	justify-items: center;
+	border-radius: 5px;
+
+	@include from($laptop) {
+		max-width: 35%;
+		margin: auto;
+	}
+}

@@ -1,0 +1,82 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<div class="modal-overlay" (click)="handleClose()" (keydown)="handleClose()" tabindex="0"></div>
+
+<div class="modal-content">
+	<div class="modal-content__borde">
+		<img class="modal-content__borde-img" src="/images/background-lia.svg" alt="" loading="lazy" />
+	</div>
+	<div
+		[ngClass]="{
+			'modal-content__container-image--default': welcome,
+			'modal-content__container-image--top': !welcome
+		}"
+		class="modal-content__container-image"
+	>
+		<div
+			[ngClass]="{
+				'modal-content__circle--default': welcome,
+				'modal-content__circle--top': !welcome
+			}"
+			class="modal-content__circle modal-content__circle--gray-light"
+		></div>
+		<img class="modal-content__image" src="/images/lia.svg" alt="" loading="lazy" />
+	</div>
+	<button class="modal-content__close" type="button" (click)="handleClose()">
+		<img src="/images/close-white.svg" width="25" height="25" alt="" />
+	</button>
+	<div
+		[ngClass]="{
+			'modal-content__chat--default': welcome,
+			'modal-content__chat--top': !welcome
+		}"
+		class="modal-content__chat"
+		#chatContainer
+	>
+		@if (welcome) {
+			<div class="modal-content__welcome">
+				<div class="modal-content__greeting">
+					Hola! Soy Super Retail,<br />
+					tu asesora de productos IA
+					<p>¿cómo puedo ayudarte hoy?</p>
+				</div>
+				@for (question of defaultQuestion; track $index) {
+					<a-custom-button
+						[text]="question.prompt"
+						(buttonClick)="sendDefaultQuestion(question)"
+					></a-custom-button>
+				}
+			</div>
+		} @else {
+			<div class="modal-content__chat-ia">
+				<a-card-welcome class="modal-content__welcome"></a-card-welcome>
+				<a-card-chat [chats]="chats"></a-card-chat>
+				@if (isTyping) {
+					<div class="typing-indicator">
+						<span>Escribiendo...</span>
+					</div>
+				}
+			</div>
+		}
+	</div>
+	<div
+		class="modal-content__question"
+		[ngClass]="{ 'modal-content__question-button--disabled': isDisableInput }"
+	>
+		<a-custom-input-text
+			#inputText
+			(debouncedInput)="handleDebouncedInput($event)"
+			(inputChanged)="handleInputChanged($event)"
+			[disableInput]="isDisableInput"
+		></a-custom-input-text>
+		<img
+			class="modal-content__question-button"
+			src="/images/send.svg"
+			alt=""
+			(click)="sendQuestion()"
+			(keydown.enter)="sendQuestion()"
+			[ngClass]="{
+				'modal-content__question-button--disabled': !isInputEmpty
+			}"
+		/>
+	</div>
+</div>
