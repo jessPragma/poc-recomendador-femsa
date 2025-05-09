@@ -22,7 +22,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 400px;
+	height: 210px;
 	color: white;
 	background-size: cover;
 	background-position: center;
@@ -91,6 +91,9 @@
 }
 
 @include from($tablet) {
+	.carousel-content {
+		height: 400px;
+	}
 	.carousel-control-prev,
 	.carousel-control-next {
 		top: 45%;
@@ -104,6 +107,9 @@
 }
 
 @include from($laptop) {
+	.carousel-content {
+		height: 400px;
+	}
 	.carousel-control-prev,
 	.carousel-control-next {
 		top: 45%;
@@ -117,6 +123,9 @@
 }
 
 @include from($dispositive-big) {
+	.carousel-content {
+		height: 400px;
+	}
 	.carousel-control-prev {
 		left: 100px;
 	}

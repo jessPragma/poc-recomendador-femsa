@@ -7,11 +7,12 @@ import { OCarouselOlimpicaComponent } from '@ui/organisms/o-carousel-olimpica/o-
 import { TModalComponent } from '@ui/templates/t-modal/t-modal.component';
 import { MNavbarOlimpicaComponent } from "../../../ui/molecules/m-navbar-olimpica/m-navbar-olimpica.component";
 import { HeaderSuperRetailComponent } from "../header-super-retail/header-super-retail.component";
+import { FooterSuperRetailComponent } from "../footer-super-retail/footer-super-retail.component";
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterOutlet,HeaderSuperRetailComponent, TModalComponent, MNavbarOlimpicaComponent, ACardLocationComponent, ALogoComponent, OCarouselOlimpicaComponent, MBannerOlimpicaComponent],
+  imports: [RouterOutlet, HeaderSuperRetailComponent, FooterSuperRetailComponent, TModalComponent, MNavbarOlimpicaComponent, ACardLocationComponent, ALogoComponent, OCarouselOlimpicaComponent, MBannerOlimpicaComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
