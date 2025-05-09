@@ -99,7 +99,9 @@
 	@include from($dispositive-big) {
 		&__main {
 			&__container-image {
-				top: 55%;
+				position: sticky;
+				margin-top: -288px;
+				margin-left: 92%;
 			}
 		}
 	}
