@@ -1,71 +1,82 @@
 import { NgStyle } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 @Component({
   selector: 'o-carousel-olimpica',
   standalone: true,
-  imports: [CarouselModule,NgStyle],
+  imports: [CarouselModule, NgStyle],
   templateUrl: './o-carousel-olimpica.component.html',
   styleUrl: './o-carousel-olimpica.component.scss'
 })
-export class OCarouselOlimpicaComponent {
+export class OCarouselOlimpicaComponent implements OnInit {
+  currentResolution: string = '1024px'; // Valor por defecto
+  
   carouselItems = [
     {
-      background: 'images/banner1-1024px.png',
-      title: 'Otro Slide',
-      subtitle: 'Descripción del segundo slide',
+      background: '',
+      title: 'Banner 1',
+      subtitle: 'Descripción del banner 1',
       buttonText: 'Más Información'
     },
     {
-      background: 'images/olimpica/third-image.webp',
-      title: 'Otro Slide',
-      subtitle: 'Descripción del segundo slide',
+      background: '',
+      title: 'Banner 2',
+      subtitle: 'Descripción del banner 2',
       buttonText: 'Más Información'
     },
     {
-      background: 'images/olimpica/fourth-image.webp',
-      title: 'Otro Slide',
-      subtitle: 'Descripción del segundo slide',
+      background: '',
+      title: 'Banner 3',
+      subtitle: 'Descripción del banner 3',
       buttonText: 'Más Información'
-    },
-    {
-      background: 'images/olimpica/fifth-image.webp',
-      title: 'Otro Slide',
-      subtitle: 'Descripción del segundo slide',
-      buttonText: 'Más Información'
-    },
-    {
-      background: 'images/olimpica/sixth-image.webp',
-      title: 'Otro Slide',
-      subtitle: 'Descripción del segundo slide',
-      buttonText: 'Más Información'
-    },
-    {
-      background: 'images/olimpica/seventh-image.webp',
-      title: 'Otro Slide',
-      subtitle: 'Descripción del segundo slide',
-      buttonText: 'Más Información'
-    },
-    {
-      background: 'images/olimpica/eighth-image.webp',
-      title: 'Otro Slide',
-      subtitle: 'Descripción del segundo slide',
-      buttonText: 'Más Información'
-    },
+    }
   ];
 
-  duplicatedCarouselItems = [
-    this.carouselItems[this.carouselItems.length - 1], // Último item como primero (duplicado)
-    ...this.carouselItems,
-    this.carouselItems[0] // Primer item como último (duplicado)
-  ];
+  duplicatedCarouselItems: any[] = [];
   currentSlide = 1; // Comienza en el primer slide real
   transitionStyle = 'transform 0.5s ease';
   isTransitioning = false;
 
-  constructor() {
+  constructor() { }
+  
+  ngOnInit() {
+    this.checkScreenSize();
+    this.updateBannerImages();
     setInterval(() => this.nextSlide(), 3000); // Cambio automático cada 3 segundos
+  }
+  
+  @HostListener('window:resize')
+  onResize() {
+    this.checkScreenSize();
+    this.updateBannerImages();
+  }
+  
+  checkScreenSize() {
+    const width = window.innerWidth;
+    if (width <= 744) {
+      this.currentResolution = '744px';
+    } else if (width <= 1024) {
+      this.currentResolution = '1024px';
+    } else if (width <= 1440) {
+      this.currentResolution = '1440px';
+    } else {
+      this.currentResolution = '1920px';
+    }
+  }
+  
+  updateBannerImages() {
+    // Actualiza las URLs de las imágenes según la resolución actual
+    this.carouselItems[0].background = `images/banner1-${this.currentResolution}.png`;
+    this.carouselItems[1].background = `images/banner2-${this.currentResolution}.png`;
+    this.carouselItems[2].background = `images/banner3-${this.currentResolution}.png`;
+    
+    // Actualiza el array duplicado
+    this.duplicatedCarouselItems = [
+      this.carouselItems[this.carouselItems.length - 1], // Último item como primero (duplicado)
+      ...this.carouselItems,
+      this.carouselItems[0] // Primer item como último (duplicado)
+    ];
   }
 
   nextSlide() {
