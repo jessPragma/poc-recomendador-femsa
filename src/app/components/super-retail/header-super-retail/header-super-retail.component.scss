@@ -1,4 +1,103 @@
 @import 'main';
+
+// Sidebar Menu Styles
+.sidebar-menu {
+	position: fixed;
+	top: 0;
+	left: -100%;
+	width: 320px;
+	height: 100%;
+	background-color: white;
+	z-index: 1000;
+	transition: left 0.3s ease;
+	overflow-y: auto;
+	box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+	
+	// Hide sidebar menu on screens larger than 744px
+	@include from($laptop) {
+		display: none;
+	}
+	
+	&--open {
+		left: 0;
+	}
+	
+	&__header {
+		background-color: #FB1909;
+		color: white;
+		padding: 15px 0;
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+		align-items: center;
+		justify-content: space-between;
+		position: relative;
+	}
+	
+	&__logo {
+		width: 40px;
+	}
+	
+	&__user {
+		font-weight: 500;
+		display: flex;
+		gap: 5px;
+	}
+	
+	&__close {
+		cursor: pointer;
+		font-size: 24px;
+		position: absolute;
+    	right: 20px;
+	}
+	
+	&__content {
+		padding: 0;
+	}
+	
+	&__item {
+		padding: 15px;
+		border-bottom: 1px solid #DBDBDB;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin: auto;
+		width: 80%;
+	}
+}
+
+.sidebar-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.3s ease;
+	
+	// Hide overlay on screens larger than 744px
+	@include from($laptop) {
+		display: none;
+	}
+	
+	&--visible {
+		opacity: 1;
+		pointer-events: all;
+	}
+}
+
+.item-icon {
+	width: 24px;
+	height: 24px;
+}
+
+.close-icon {
+	font-size: 24px;
+	line-height: 1;
+}
 .header-super-retail {
 	background-color: #FB1909;
 	color: white;
@@ -15,10 +114,9 @@
 	}
 
 	&__login-text {
-		display: flex;
 		align-content: center;
 		align-items: center;
-		gap: 1rem;
+		gap: 5px;
 	}
 
 	&__heart {
@@ -28,8 +126,7 @@
 
 	&__login {
 		display: grid;
-		grid-template-columns: 44% 10% 23% 23%;
-		padding: 0 20%;
+		grid-template-columns: 50% 10% 20% 20%;
 		justify-items: center;
 		grid-area: options;
 	}
@@ -60,12 +157,6 @@
 		display: none;
 	}
 
-	@include from($tablet) {
-		&__login {
-			padding: 0;
-		}
-	}
-
 	@include from($laptop) {
 		grid-template-columns: 25% 42% 25%;
 		grid-template-areas: "logo search options";
@@ -75,7 +166,8 @@
 		}
 
 		&__login {
-			padding: 0 5%;
+			padding: 0 5% 0 0;
+			grid-template-columns: 52% 8% 20% 20%;
 		}
 
 		&__bars {
@@ -84,6 +176,10 @@
 
 		&__only-desk {
 			display: block;
+		}
+
+		&__login-text {
+			display: flex;
 		}
 	}
 
@@ -110,6 +206,10 @@
 		&__only-desk {
 			display: block;
 		}
+
+		&__login-text {
+			display: flex;
+		}
 	}
 
 	@include from($dispositive-big) {
@@ -130,6 +230,10 @@
 
 		&__only-desk {
 			display: block;
+		}
+
+		&__login-text {
+			display: flex;
 		}
 
 		&__search {

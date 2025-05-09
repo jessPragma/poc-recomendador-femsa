@@ -1,5 +1,5 @@
 <header class="header-super-retail">
-	<a-logo [src]="'icons/bars.svg'" class="header-super-retail__bars"></a-logo>
+	<a-logo [src]="'icons/bars.svg'" class="header-super-retail__bars" (click)="toggleSidebar()"></a-logo>
 	<a-logo [src]="'icons/logo-sr.svg'" class="header-super-retail__logo"></a-logo>
 	<div class="header-super-retail__search">
 		<a-search-text></a-search-text>
@@ -7,6 +7,7 @@
 	<div class="header-super-retail__login">
 		<div class="header-super-retail__login-text header-super-retail__only-desk">
 			¡Hola! Andrés
+			<a-logo [src]="'icons/arrow-down.svg'"></a-logo>
 		</div>
 		<div class="header-super-retail__separator header-super-retail__only-desk">
 			<a-separator></a-separator>
@@ -19,3 +20,44 @@
 		</div>
 	</div>
 </header>
+
+<!-- Sidebar Menu Modal -->
+<div class="sidebar-menu" [class.sidebar-menu--open]="isSidebarOpen">
+	<div class="sidebar-menu__header">
+		<div class="sidebar-menu__logo">
+			<a-logo [src]="'images/logo-footer.png'"></a-logo>
+		</div>
+		<div class="sidebar-menu__user">¡Hola! Andrés
+			<a-logo [src]="'icons/arrow-down.svg'"></a-logo>
+		</div>
+		<div class="sidebar-menu__close" (click)="toggleSidebar()">
+			<span class="close-icon">✕</span>
+		</div>
+	</div>
+	<div class="sidebar-menu__content">
+		<div class="sidebar-menu__item">Recetas</div>
+		<div class="sidebar-menu__item">Bebidas</div>
+		<div class="sidebar-menu__item">Snack y botanas</div>
+		<div class="sidebar-menu__item">
+			<a-logo [src]="'images/promotions.svg'" class="item-icon"></a-logo>
+			Promociones
+		</div>
+		<div class="sidebar-menu__item">
+			<a-logo [src]="'images/credit-card.svg'" class="item-icon"></a-logo>
+			Tarjeta Super Retail
+		</div>
+		<div class="sidebar-menu__item">
+			<a-logo [src]="'images/recipes.svg'" class="item-icon"></a-logo>
+			Recetas
+		</div>
+		<div class="sidebar-menu__item">Quiénes somos</div>
+		<div class="sidebar-menu__item">Puntos SR</div>
+		<div class="sidebar-menu__item">Medios de pagos</div>
+		<div class="sidebar-menu__item">
+			<a-logo [src]="'icons/notification.svg'" class="item-icon"></a-logo>
+			Notificaciones
+		</div>
+	</div>
+</div>
+
+<div class="sidebar-overlay" [class.sidebar-overlay--visible]="isSidebarOpen" (click)="closeSidebar()"></div>

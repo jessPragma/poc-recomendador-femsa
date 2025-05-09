@@ -11,5 +11,29 @@ import { ASeparatorComponent } from "../../../ui/atoms/a-separator/a-separator.c
   styleUrl: './header-super-retail.component.scss'
 })
 export class HeaderSuperRetailComponent {
+  isSidebarOpen = false;
 
+  /**
+   * Toggles the sidebar menu open/closed state
+   */
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    
+    // Prevent body scrolling when sidebar is open
+    if (this.isSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  /**
+   * Closes the sidebar menu
+   */
+  closeSidebar(): void {
+    if (this.isSidebarOpen) {
+      this.isSidebarOpen = false;
+      document.body.style.overflow = '';
+    }
+  }
 }
