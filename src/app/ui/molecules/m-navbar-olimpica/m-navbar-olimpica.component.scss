@@ -1,59 +1,44 @@
 @import 'main';
-.m-navbar-olimpica {
-	display: grid;
-	background-color: #6429cd;
-	color: white;
-	min-height: 80px;
+.m-navbar {
+	display: none;
+	grid-template-columns: 65% 35%;
+	background-color: $navbar;
+	color: $text-dark;
+	min-height: 50px;
 	align-content: center;
 	align-items: center;
-
-	&__flash {
-		background-color: #6429cd;
-		padding-top: 9px;
-		padding-right: 5px;
-		border-radius: 5px;
-		width: 70px;
-		height: 35px;
-	}
+	height: 30px;
 
 	&__nav-desktop {
-		display: none;
+		display: flex;
+		column-gap: 0.5rem;
 	}
 
-	&__nav-mobile {
+	&__nav-link {
 		display: flex;
-		justify-content: center;
+		align-content: center;
 		align-items: center;
-		column-gap: 1rem;
+		gap: 1rem;
+		justify-content: end;
+		margin-right: 15%;
+	}
+
+	&__nav-fast {
+		display: flex;
+		align-items: center;
+    	gap: 0.9rem;
+	}
+
+	@include from($tablet) {
 	}
 
 	@include from($laptop) {
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 63% 37%;
+		display: grid;
 
 		&__nav-desktop {
-			display: flex;
-			column-gap: 1rem;
-			justify-content: center;
+			margin-left: 9%;
 			align-items: center;
-		}
-
-		&__nav-mobile {
-			display: none;
-		}
-
-		&__card {
-			display: grid;
-			align-items: center;
-			justify-self: end;
-			grid-template-columns: repeat(2, 1fr);
-		}
-
-		&__flex {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			margin-right: 35px;
-			column-gap: 1rem;
 		}
 
 		&__credit-card {
@@ -73,12 +58,30 @@
 				height: 25px;
 			}
 		}
-	}
-}
 
-.hidden {
-	display: none;
-	@include from($laptop) {
+		&__nav-link {
+			gap: 0.5rem;
+			margin-right: 10%;
+		}
+	}
+
+	@include from($laptop-large) {
+		grid-template-columns: 50% 50%;
 		display: grid;
+
+		&__nav-desktop {
+			column-gap: 2rem;
+			margin-left: 12%;
+		}
+	}
+
+	@include from($dispositive-big) {
+		grid-template-columns: 45% 55%;
+		display: grid;
+
+		&__nav-desktop {
+			column-gap: 1.8rem;
+			margin-left: 14%;
+		}
 	}
 }

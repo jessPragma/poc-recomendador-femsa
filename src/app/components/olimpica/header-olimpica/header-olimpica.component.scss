@@ -3,70 +3,138 @@
 	background-color: #FB1909;
 	color: white;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 1fr 1fr;
-	padding: 14px 35px 14px 15px;
+	grid-template-columns: 8% 20% 50% 13%;
+	grid-template-rows: 1fr;
+	grid-template-areas: "bars logo search options";
+	gap: 3%;
 	align-items: center;
+	height: 60px;
 
 	&__logo {
 		grid-area: logo;
-		margin: auto;
 	}
 
 	&__login-text {
-		display: none;
+		display: flex;
+		align-content: center;
+		align-items: center;
+		gap: 1rem;
 	}
 
 	&__heart {
-		display: none;
+		display: block;
+		justify-self: center;
 	}
 
 	&__login {
 		display: grid;
 		grid-template-columns: 44% 10% 23% 23%;
+		padding: 0 20%;
 		justify-items: center;
-		padding: 0;
 		grid-area: options;
 	}
 
 	&__search {
-		grid-row: 2/3;
-		grid-column: 1/3;
+		grid-column: 3/4;
+		grid-row: 1/2;
 		margin: auto;
-		width: 60%;
+		width: 80%;
 		grid-area: search;
+	}
+
+	&__separator {
+		margin: auto;
+	}	
+
+	&__bars {
+		grid-area: bars;
+		margin-left: 60%;
+	}
+
+	&__only-mobile {
+		grid-area: bars;
+		margin-left: 60%;
+	}
+
+	&__only-desk {
+		display: none;
+	}
+
+	@include from($tablet) {
+		&__login {
+			padding: 0;
+		}
 	}
 
 	@include from($laptop) {
 		grid-template-columns: 25% 42% 25%;
-		grid-template-rows: 1fr;
 		grid-template-areas: "logo search options";
-		gap: 4%;
 
-		&__search {
-			grid-column: 3/4;
-			grid-row: 1/2;
-			grid-area: search;
-		}
-
-		&__login-text {
-			display: flex;
-			align-items: center;
-			gap: 1rem;
-		}
-
-		&__separator {
-			margin: auto;
-		}
-
-		&__heart {
-			display: block;
-			justify-self: center;
+		&__logo {
+			margin-left: 25%;
 		}
 
 		&__login {
-			grid-template-columns: 44% 10% 23% 23%;
-			padding: 0 20%;
+			padding: 0 5%;
+		}
+
+		&__bars {
+			display: none;
+		}
+
+		&__only-desk {
+			display: block;
 		}
 	}
+
+	@include from($laptop-large) {
+		grid-template-columns: 25% 42% 25%;
+		grid-template-areas: "logo search options";
+	
+		&__logo {
+			margin-left: 25%;
+		}
+
+		&__login {
+			padding: 0 10%;
+		}
+
+		&__bars {
+			display: none;
+		}
+
+		&__search {
+			width: 80%;
+		}
+
+		&__only-desk {
+			display: block;
+		}
+	}
+
+	@include from($dispositive-big) {
+		grid-template-columns: 25% 42% 25%;
+		grid-template-areas: "logo search options";
+		
+		&__logo {
+			margin-left: 25%;
+		}
+
+		&__login {
+			padding: 0 20%;
+		}
+
+		&__bars {
+			display: none;
+		}
+
+		&__only-desk {
+			display: block;
+		}
+
+		&__search {
+			width: 50%;
+		}
+	}
+
 }

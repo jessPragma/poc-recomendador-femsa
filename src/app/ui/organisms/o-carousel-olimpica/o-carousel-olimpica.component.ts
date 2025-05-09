@@ -12,7 +12,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 export class OCarouselOlimpicaComponent {
   carouselItems = [
     {
-      background: 'images/olimpica/second-image.webp',
+      background: 'images/banner1-1024px.png',
       title: 'Otro Slide',
       subtitle: 'Descripción del segundo slide',
       buttonText: 'Más Información'
