@@ -1,11 +1,12 @@
 import { NgStyle } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { ALogoComponent } from '../../atoms/a-logo/a-logo.component';
 
 @Component({
   selector: 'o-carousel-olimpica',
   standalone: true,
-  imports: [CarouselModule, NgStyle],
+  imports: [CarouselModule, NgStyle, ALogoComponent],
   templateUrl: './o-carousel-olimpica.component.html',
   styleUrl: './o-carousel-olimpica.component.scss'
 })

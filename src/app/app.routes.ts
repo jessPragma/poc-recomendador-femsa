@@ -10,7 +10,7 @@ export const routes: Routes = [
 	{
 		path: 'super-retail',
 		loadComponent: async () =>
-			import('./components/olimpica/main/main.component').then((m) => m.MainComponent),
+			import('./components/super-retail/main/main.component').then((m) => m.MainComponent),
 		children: [...checkOutRoutes],
 	},
 ];

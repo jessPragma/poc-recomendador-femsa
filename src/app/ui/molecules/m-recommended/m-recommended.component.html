@@ -1,0 +1,14 @@
+<div class="recommended-container">
+  <h2 class="recommended-title">Recomendados para ti</h2>
+  <div class="recommended-items">
+    @for (item of recommendedItems; track item.id) {
+      <div class="recommended-item">
+        <div class="recommended-card" [style.background-image]="'url(' + item.image + ')'">
+          <div class="recommended-overlay">
+            <span class="recommended-label">{{item.title}}</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -5,12 +5,13 @@ import { ALogoComponent } from "../../../ui/atoms/a-logo/a-logo.component";
 import { MBannerOlimpicaComponent } from "../../../ui/molecules/m-banner-olimpica/m-banner-olimpica.component";
 import { MNavbarOlimpicaComponent } from "../../../ui/molecules/m-navbar-olimpica/m-navbar-olimpica.component";
 import { OCarouselOlimpicaComponent } from "../../../ui/organisms/o-carousel-olimpica/o-carousel-olimpica.component";
-import { HeaderOlimpicaComponent } from "../header-olimpica/header-olimpica.component";
+import { HeaderSuperRetailComponent } from "../header-super-retail/header-super-retail.component";
+import { RecommendedComponent } from "../recommended/recommended.component";
 
 @Component({
   selector: 'app-home-olimpica',
   standalone: true,
-  imports: [HeaderOlimpicaComponent, TModalComponent, MNavbarOlimpicaComponent, ACardLocationComponent, ALogoComponent, OCarouselOlimpicaComponent, MBannerOlimpicaComponent],
+  imports: [HeaderSuperRetailComponent, TModalComponent, MNavbarOlimpicaComponent, ACardLocationComponent, ALogoComponent, OCarouselOlimpicaComponent, MBannerOlimpicaComponent, RecommendedComponent],
   templateUrl: './home-olimpica.component.html',
   styleUrl: './home-olimpica.component.scss'
 })

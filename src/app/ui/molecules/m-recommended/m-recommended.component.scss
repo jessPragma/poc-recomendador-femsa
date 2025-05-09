@@ -1,0 +1,71 @@
+@import "../../../../assets/scss/helpers/_mixins.scss";
+@import "../../../../assets/scss/utils/_variables.scss";
+
+.recommended-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.recommended-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: $text-dark;
+  margin-bottom: 20px;
+}
+
+.recommended-items {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+  
+  @include from($tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include from($laptop) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.recommended-item {
+  position: relative;
+  cursor: pointer;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 160px;
+}
+
+.recommended-card {
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+    
+    .recommended-overlay {
+      opacity: 1;
+    }
+  }
+}
+
+.recommended-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 12px;
+  transition: opacity 0.3s ease;
+}
+
+.recommended-label {
+  color: $text-white;
+  font-weight: bold;
+  font-size: 16px;
+}

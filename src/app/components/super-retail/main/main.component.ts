@@ -6,12 +6,12 @@ import { MBannerOlimpicaComponent } from '@ui/molecules/m-banner-olimpica/m-bann
 import { OCarouselOlimpicaComponent } from '@ui/organisms/o-carousel-olimpica/o-carousel-olimpica.component';
 import { TModalComponent } from '@ui/templates/t-modal/t-modal.component';
 import { MNavbarOlimpicaComponent } from "../../../ui/molecules/m-navbar-olimpica/m-navbar-olimpica.component";
-import { HeaderOlimpicaComponent } from "../header-olimpica/header-olimpica.component";
+import { HeaderSuperRetailComponent } from "../header-super-retail/header-super-retail.component";
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterOutlet,HeaderOlimpicaComponent, TModalComponent, MNavbarOlimpicaComponent, ACardLocationComponent, ALogoComponent, OCarouselOlimpicaComponent, MBannerOlimpicaComponent],
+  imports: [RouterOutlet,HeaderSuperRetailComponent, TModalComponent, MNavbarOlimpicaComponent, ACardLocationComponent, ALogoComponent, OCarouselOlimpicaComponent, MBannerOlimpicaComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
