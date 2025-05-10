@@ -20,6 +20,7 @@
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 16px;
+  justify-items: center;
   
   @include from($tablet) {
     grid-template-columns: repeat(2, 1fr);
@@ -37,7 +38,7 @@
   overflow: hidden;
   max-width: 293px;
   height: 160px;
-  margin-left: 25px;
+  width: 100%;
 }
 
 .recommended-card {
@@ -81,9 +82,5 @@
 }
 
 @include from($laptop) {
-
-  .recommended-item {
-    margin-left: 0;
-  }
-
+  /* No adicional styles needed here now */
 }
