@@ -15,7 +15,7 @@
 		<div class="header-super-retail__heart header-super-retail__only-desk">
 			<a-logo [src]="'icons/notification.svg'"></a-logo>
 		</div>
-		<div class="header-super-retail__shopping">
+		<div class="header-super-retail__shopping" (click)="toggleCartModal()">
 			<a-logo [src]="'icons/car.svg'"></a-logo>
 		</div>
 	</div>
@@ -60,4 +60,7 @@
 	</div>
 </div>
 
-<div class="sidebar-overlay" [class.sidebar-overlay--visible]="isSidebarOpen" (click)="closeSidebar()"></div>
+<div class="sidebar-overlay" [class.sidebar-overlay--visible]="isSidebarOpen || isCartOpen" (click)="closeAll()"></div>
+
+<!-- Cart Modal Component -->
+<app-cart-modal [isOpen]="isCartOpen" (close)="closeCart()"></app-cart-modal>
