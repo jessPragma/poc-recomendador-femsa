@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "poc-asistente-soi": {
+    "poc-recomendador-femsa": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/poc-bankia-recomendador",
+            "outputPath": "dist/poc-recomendador-femsa",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -70,10 +70,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "poc-asistente-soi:build:production"
+              "buildTarget": "poc-recomendador-femsa:build:production"
             },
             "development": {
-              "buildTarget": "poc-asistente-soi:build:development"
+              "buildTarget": "poc-recomendador-femsa:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -110,6 +110,9 @@
               "src/**/*.html"
             ]
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
