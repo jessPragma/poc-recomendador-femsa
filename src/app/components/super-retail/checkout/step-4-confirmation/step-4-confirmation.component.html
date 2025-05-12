@@ -1,0 +1,74 @@
+<div class="confirmation-page">
+  <div class="confirmation-container">
+    <h1 class="confirmation-title">¡Compra exitosa!</h1>
+    
+    <div class="order-summary">
+      <div class="order-details">
+        <table class="order-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of orderDetails.products">
+              <td>{{ product.name }}</td>
+              <td>{{ product.quantity }}</td>
+              <td>${{ product.price.toFixed(2) }}</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="2">Total</td>
+              <td>${{ orderDetails.total.toFixed(2) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="delivery-payment-info">
+        <div class="info-item">
+          <div class="info-icon payment">
+            <span class="checkmark">✓</span>
+          </div>
+          <div class="info-content">
+            <h3>Pago</h3>
+            <p>Realizado desde {{ orderDetails.payment.method }}</p>
+          </div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-icon delivery">
+            <span class="location-pin">📍</span>
+          </div>
+          <div class="info-content">
+            <h3>Entrega</h3>
+            <p>Compra lista para recoger en:</p>
+            <div class="delivery-details">
+              <div class="detail-row">
+                <span class="label">Ciudad</span>
+                <span class="value">{{ orderDetails.delivery.city }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Delegación</span>
+                <span class="value">{{ orderDetails.delivery.delegation }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Tienda</span>
+                <span class="value">{{ orderDetails.delivery.store }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="download-invoice">
+      <a href="#" class="invoice-link">Descargar factura <span class="download-icon">↓</span></a>
+    </div>
+    
+    <div class="back-to-shop">
+      <a routerLink="/super-retail" class="shop-link">Continuar comprando</a>
+    </div>
+  </div>
+</div>

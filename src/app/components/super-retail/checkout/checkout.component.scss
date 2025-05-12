@@ -1,5 +1,120 @@
+@import "../../../../assets/scss/utils/variables";
+
 .checkout {
 	display: grid;
 	margin: 1rem;
 	gap: 1rem;
+}
+    
+.checkout-title {
+	grid-column: 1 / -1;
+	font-size: 21px;
+	font-weight: 600;
+	line-height: 120%;
+	margin-bottom: 0;
+}
+
+.checkout-header {
+	margin: 20px 0 30px 0;
+
+	.progress-steps {
+		align-items: center;
+		justify-content: center;
+		margin: 0 auto;
+		position: relative;
+		width: 560px;
+		display: grid;
+		flex-direction: row;
+		grid-template-columns: 140px 290px 130px;
+
+		.step {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			position: relative;
+			z-index: 1;
+
+			&.active {
+				.step-number {
+					color: $separator;
+				}
+
+				.step-label {
+					color: $separator;
+					font-weight: 400;
+					font-size: 12px;
+					line-height: 140%;
+				}
+			}
+
+			&.completed {
+				.step-number {
+					color: $text-white;
+					background-color: $separator;
+					border: 2px solid $separator;
+				}
+
+				.step-label {
+					color: $separator;
+				}
+			}
+
+			.step-number {
+				width: 30px;
+				height: 30px;
+				border-radius: 50%;
+				background-color: $background-white;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: 400;
+				font-size: 16px;
+				line-height: 140%;
+				margin-bottom: 8px;
+				border: 2px solid $gray-separator;
+				color: $text-dark-full;
+			}
+
+			.number-active {
+				border: 2px solid $separator;
+				color: $separator;
+			}
+
+			.step-label {
+				font-size: 12px;
+				text-align: center;
+				color: $text-dark-full;
+			}
+		}
+
+		.step-line {
+			position: absolute;
+			top: 15px;
+			width: 95px;
+			flex-grow: 1;
+			height: 2px;
+			background-color: $gray-separator;
+			max-width: 100px;
+		}
+
+		.step-active {
+			background-color: $separator;
+		}
+
+		.step-line-1 {
+			left: 85px;
+		}
+
+		.step-line-2 {
+			left: 180px;
+		}
+
+		.step-line-3 {
+			left: 295px;
+		}
+
+		.step-line-4 {
+			left: 390px;
+		}
+	}
 }

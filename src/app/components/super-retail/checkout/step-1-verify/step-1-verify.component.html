@@ -1,0 +1,98 @@
+<div class="checkout-step">
+  <div class="checkout-header">
+    <div class="progress-steps">
+      <div class="step active">
+        <div class="step-number number-active">1</div>
+        <div class="step-label">Verifica la compra</div>
+      </div>
+      <div class="step-line step-line-1 step-active"></div>
+      <div class="step-line step-line-2"></div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-label">Datos de contacto y entrega</div>
+      </div>
+      <div class="step-line step-line-3"></div>
+      <div class="step-line step-line-4"></div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-label">Forma de pago</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkout-content">
+    <h1 class="checkout-title">Mi carrito de compras</h1>
+    
+    <div class="checkout-section">
+      <h2 class="section-title">Verifica la compra</h2>
+      <p class="section-description">Si al preparar tu pedido hay productos sin stock, nos comunicaremos contigo para ofrecerte alternativas.</p>
+      
+      <div class="product-list">
+        <div class="product-count">Añadidos en total {{ products.length }} productos</div>
+        
+        <div class="product-item" *ngFor="let product of products">
+          <div class="product-image">
+            <img [src]="product.image" [alt]="product.name">
+          </div>
+          <div class="product-details">
+            <div class="product-brand">Marca</div>
+            <div class="product-brand-name">{{ product.brand }}</div>
+            <div class="product-name">{{ product.name }} {{ product.size }}</div>
+          </div>
+          <div class="product-quantity">
+            <button class="quantity-btn quantity-btn--minus">−</button>
+            <input type="text" [value]="product.quantity" class="quantity-input">
+            <button class="quantity-btn quantity-btn--plus">+</button>
+          </div>
+          <div class="product-price">${{ product.price.toFixed(2) }}</div>
+          <div class="remove-btn">
+            <a-logo [src]="'icons/trash.svg'"></a-logo>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <div class="summary-header">Resumen de la compra</div>
+      
+      <div class="coupon-section">
+        <div class="coupon-label">Ingresa un cupón de descuento</div>
+        <div class="coupon-input-group">
+          <input type="text" placeholder="Ej: SR3289911111 " class="coupon-input">
+          <button class="coupon-button">Aplicar</button>
+        </div>
+      </div>
+
+      <div class="content-summary">
+      
+      <div class="price-summary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>${{ subtotal.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Descuentos</span>
+          <span>- ${{ discount.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>${{ total.toFixed(2) }}</span>
+        </div>
+      </div>
+      
+      <button class="continue-btn" routerLink="/super-retail/checkout/step-2">Continuar</button>
+    </div>
+    </div>
+
+    <div class="cart-actions">
+      <button class="add-more-btn">
+        Añadir más productos
+        <span class="plus-icon">&nbsp;&nbsp;+</span>
+      </button>
+      <button class="empty-cart-btn">
+        Vaciar carrito
+        <a-logo class="empty-cart-icon" [src]="'icons/delete.svg'"></a-logo>
+      </button>
+    </div>
+  </div>
+</div>

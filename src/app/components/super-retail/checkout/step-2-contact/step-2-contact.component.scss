@@ -1,0 +1,187 @@
+@import "../../../../../assets/scss/utils/variables";
+@import "../checkout.component.scss";
+
+.checkout-step {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+  
+  .checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+    
+    .checkout-section {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+      
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      
+      .section-description {
+        color: $background-card;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+      
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        
+        .form-group {
+          &.full-width {
+            grid-column: 1 / -1;
+          }
+          
+          label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: $text-default;
+          }
+          
+          .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid $border-gray;
+            border-radius: 4px;
+            font-size: 14px;
+            
+            &:focus {
+              outline: none;
+              border-color: $separator;
+            }
+          }
+        }
+      }
+    }
+    
+    .cart-summary {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      align-self: start;
+      
+      .summary-header {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      
+      .coupon-section {
+        margin-bottom: 20px;
+        
+        .coupon-label {
+          font-size: 14px;
+          margin-bottom: 10px;
+        }
+        
+        .coupon-input-group {
+          display: flex;
+          
+          .coupon-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid $border-gray;
+            border-radius: 4px 0 0 4px;
+            font-size: 14px;
+            
+            &:focus {
+              outline: none;
+              border-color: $separator;
+            }
+          }
+          
+          .coupon-button {
+            padding: 10px 15px;
+            background-color: $background-white;
+            border: 1px solid $separator;
+            border-left: none;
+            color: $separator;
+            font-weight: 500;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            
+            &:hover {
+              background-color: rgba($separator, 0.05);
+            }
+          }
+        }
+      }
+      
+      .price-summary {
+        .summary-row {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+          font-size: 14px;
+          
+          .price {
+            font-weight: 500;
+            
+            &.discount {
+              color: #28a745;
+            }
+          }
+          
+          &.total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid gray;
+            font-size: 18px;
+            font-weight: 600;
+          }
+        }
+      }
+      
+      .navigation-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        
+        .back-btn, .continue-btn {
+          padding: 12px;
+          border-radius: 4px;
+          font-size: 16px;
+          font-weight: 500;
+          cursor: pointer;
+        }
+        
+        .back-btn {
+          flex: 1;
+          background-color: $background-white;
+          color: $separator;
+          border: 1px solid $separator;
+          
+          &:hover {
+            background-color: rgba($separator, 0.05);
+          }
+        }
+        
+        .continue-btn {
+          flex: 2;
+          background-color: $separator;
+          color: $text-white;
+          border: none;
+          
+          &:hover {
+            background-color: darken($separator, 5%);
+          }
+        }
+      }
+    }
+  }
+}

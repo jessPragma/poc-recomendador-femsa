@@ -1,0 +1,127 @@
+<div class="checkout-step">
+  <div class="checkout-header">
+    <div class="progress-steps">
+      <div class="step completed">
+        <div class="step-number">✓</div>
+        <div class="step-label">Verifica la compra</div>
+      </div>
+      <div class="step-line step-line-1 step-active"></div>
+      <div class="step-line step-line-2 step-active"></div>
+      <div class="step active">
+        <div class="step-number number-active">2</div>
+        <div class="step-label">Datos de contacto y entrega</div>
+      </div>
+      <div class="step-line step-line-3 step-active"></div>
+      <div class="step-line step-line-4"></div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-label">Forma de pago</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkout-content">
+    <h1 class="checkout-title">Mi carrito de compras</h1>
+    
+    <!-- Contact Information Form -->
+    <div class="checkout-section">
+      <h2 class="section-title">Datos de contacto</h2>
+      <p class="section-description">Solicitamos únicamente la información necesaria para finalizar la compra</p>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="firstName">Nombre</label>
+          <input type="text" id="firstName" [(ngModel)]="userDetails.firstName" class="form-control">
+        </div>
+        
+        <div class="form-group">
+          <label for="lastName">Apellidos</label>
+          <input type="text" id="lastName" [(ngModel)]="userDetails.lastName" class="form-control">
+        </div>
+        
+        <div class="form-group">
+          <label for="curp"># CURP</label>
+          <input type="text" id="curp" [(ngModel)]="userDetails.curp" class="form-control">
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input type="tel" id="phone" [(ngModel)]="userDetails.phone" class="form-control">
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" [(ngModel)]="userDetails.email" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery Details Form -->
+    <div class="checkout-section">
+      <h2 class="section-title">Entrega</h2>
+      <p class="section-description">Seleccione la ubicación donde desea recoger su compra</p>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="city">Ciudad</label>
+          <select id="city" [(ngModel)]="deliveryDetails.city" class="form-control">
+            <option value="Ciudad de México">Ciudad de México</option>
+            <option value="Guadalajara">Guadalajara</option>
+            <option value="Monterrey">Monterrey</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="delegation">Delegación / Mpio</label>
+          <select id="delegation" [(ngModel)]="deliveryDetails.delegation" class="form-control">
+            <option value="Tlalpan">Tlalpan</option>
+            <option value="Coyoacán">Coyoacán</option>
+            <option value="Benito Juárez">Benito Juárez</option>
+          </select>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="store">Tienda</label>
+          <select id="store" [(ngModel)]="deliveryDetails.store" class="form-control">
+            <option value="Tienda Super Retail 24">Tienda Super Retail 24</option>
+            <option value="Tienda Super Retail 32">Tienda Super Retail 32</option>
+            <option value="Tienda Super Retail 15">Tienda Super Retail 15</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="cart-summary">
+      <div class="summary-header">Resumen de la compra</div>
+      
+      <div class="coupon-section">
+        <div class="coupon-label">Ingresa un cupón de descuento</div>
+        <div class="coupon-input-group">
+          <input type="text" class="coupon-input" [(ngModel)]="couponCode">
+          <button class="coupon-button">Aplicar</button>
+        </div>
+      </div>
+      
+      <div class="price-summary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span class="price">${{ subtotal.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Descuentos</span>
+          <span class="price discount">- ${{ discount.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span class="price">${{ total.toFixed(2) }}</span>
+        </div>
+      </div>
+      
+      <div class="navigation-buttons">
+        <button class="back-btn" routerLink="/super-retail/checkout/step-1">Volver</button>
+        <button class="continue-btn" routerLink="/super-retail/checkout/step-3">Guardar y continuar</button>
+      </div>
+    </div>
+  </div>
+</div>
