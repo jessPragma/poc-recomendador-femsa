@@ -1,6 +1,6 @@
 <div class="main-olimpica">
 	<app-header-super-retail></app-header-super-retail>
-	<m-navbar-olimpica></m-navbar-olimpica>
+	<m-navbar-olimpica *ngIf="!isCheckoutRoute"></m-navbar-olimpica>
 	<router-outlet></router-outlet>
 	<app-footer-super-retail></app-footer-super-retail>
 </div>

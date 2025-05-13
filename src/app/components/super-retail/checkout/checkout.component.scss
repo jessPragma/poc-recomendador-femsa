@@ -1,5 +1,23 @@
 @import "../../../../assets/scss/utils/variables";
 
+/* Hide navbar in checkout pages */
+:host ::ng-deep m-navbar-olimpica .m-navbar {
+	display: none !important;
+}
+
+/* Custom select styling for step 2 (with golden arrow) */
+:host ::ng-deep .checkout-step-2 {
+	select {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 1L7 7L13 1" stroke="%23BC8B2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+		background-repeat: no-repeat;
+		background-position: calc(100% - 10px) center;
+		padding-right: 30px;
+	}
+}
+
 .checkout {
 	display: grid;
 	margin: 1rem;
