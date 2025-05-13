@@ -17,7 +17,7 @@ export class Step1VerifyComponent {
     {
       name: 'Jugo de naranja JUMEX',
       brand: 'JUMEX',
-      image: '/images/product1.png',
+      image: 'images/product1.png',
       quantity: 3,
       price: 35.00,
       size: '1 L'
@@ -25,7 +25,7 @@ export class Step1VerifyComponent {
     {
       name: 'Tequila Hornitos Reposado',
       brand: 'Hornitos Reposado',
-      image: '/images/product2.png',
+      image: 'images/product2.png',
       quantity: 1,
       price: 367.00,
       size: '700 ML'

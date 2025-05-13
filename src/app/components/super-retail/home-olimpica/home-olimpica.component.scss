@@ -1,6 +1,7 @@
 @import 'main';
 .home-olimpica {
 	display: grid;
+	min-height: calc(100vh - 110px - 200px);
 
 	&__main {
 		display: grid;

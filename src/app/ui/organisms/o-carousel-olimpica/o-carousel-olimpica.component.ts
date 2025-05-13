@@ -55,6 +55,7 @@ export class OCarouselOlimpicaComponent implements OnInit {
   
   checkScreenSize() {
     const width = window.innerWidth;
+    console.log(width);
     if (width <= 744) {
       this.currentResolution = '744px';
     } else if (width <= 1024) {

@@ -167,7 +167,7 @@
 @include from($laptop-large) {
   .footer-super-retail {
     padding: 40px 80px;
-    position: absolute;
+    position: relative;
     bottom: 0;
     width: 100%;
   }
@@ -198,7 +198,7 @@
 @include from($dispositive-big) {
   .footer-super-retail {
     padding: 40px 100px;
-    position: absolute;
+    position: relative;
     bottom: 0;
     max-width: 1920px;
   }

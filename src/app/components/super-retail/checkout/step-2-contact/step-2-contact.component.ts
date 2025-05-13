@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AButtonComponent } from "../../../../ui/atoms/a-button/a-button.component";
+import { ALogoComponent } from "../../../../ui/atoms/a-logo/a-logo.component";
 
 @Component({
   selector: 'app-step-2-contact',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, AButtonComponent],
+  imports: [CommonModule, RouterModule, FormsModule, AButtonComponent, ALogoComponent],
   templateUrl: './step-2-contact.component.html',
   styleUrl: './step-2-contact.component.scss'
 })

@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "baseHref": "/poc-recomendador-femsa/",
             "outputPath": "dist/poc-recomendador-femsa",
             "index": "src/index.html",
             "browser": "src/main.ts",
