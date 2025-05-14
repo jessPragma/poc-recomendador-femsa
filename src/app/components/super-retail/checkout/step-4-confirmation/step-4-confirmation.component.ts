@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ALogoComponent } from 'src/app/ui/atoms/a-logo/a-logo.component';
 
 @Component({
   selector: 'app-step-4-confirmation',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ALogoComponent],
   templateUrl: './step-4-confirmation.component.html',
   styleUrl: './step-4-confirmation.component.scss'
 })

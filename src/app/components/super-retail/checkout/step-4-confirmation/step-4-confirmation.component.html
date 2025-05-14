@@ -4,71 +4,65 @@
     
     <div class="order-summary">
       <div class="order-details">
-        <table class="order-table">
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Cantidad</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let product of orderDetails.products">
-              <td>{{ product.name }}</td>
-              <td>{{ product.quantity }}</td>
-              <td>${{ product.price.toFixed(2) }}</td>
-            </tr>
-            <tr class="total-row">
-              <td colspan="2">Total</td>
-              <td>${{ orderDetails.total.toFixed(2) }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="title-row">
+          <p class="first-detail">Producto</p>
+          <p class="second-detail">Cantidad</p>
+          <p class="third-detail">Valor</p>
+        </div>
+        <div class="product-row" *ngFor="let product of orderDetails.products">
+          <p class="first-detail">{{ product.name }}</p>
+          <p class="second-detail">{{ product.quantity }}</p>
+          <p class="third-detail">${{ product.price.toFixed(2) }}</p>
+        </div>
+        <div class="total-row">
+          <p></p>
+          <p class="second-detail">Total</p>
+          <p class="third-detail">${{ orderDetails.total.toFixed(2) }}</p>
+        </div>
       </div>
       
       <div class="delivery-payment-info">
         <div class="info-item">
-          <div class="info-icon payment">
-            <span class="checkmark">✓</span>
+          <div class="info-title">
+            <a-logo class="download-icon" [src]="'icons/check-circle.svg'"></a-logo>
+            Pago
           </div>
-          <div class="info-content">
-            <h3>Pago</h3>
-            <p>Realizado desde {{ orderDetails.payment.method }}</p>
-          </div>
+          <p>Realizado desde cuenta digital Super Retail</p>
         </div>
         
         <div class="info-item">
-          <div class="info-icon delivery">
-            <span class="location-pin">📍</span>
+          <div class="info-title delivery">
+            <a-logo class="download-icon" [src]="'icons/location-point.svg'"></a-logo>
+            Entrega
           </div>
           <div class="info-content">
-            <h3>Entrega</h3>
-            <p>Compra lista para recoger en:</p>
-            <div class="delivery-details">
-              <div class="detail-row">
+            <p class="title">Compra lista para recoger en:</p>
+              <div class="detail-row city">
                 <span class="label">Ciudad</span>
                 <span class="value">{{ orderDetails.delivery.city }}</span>
               </div>
-              <div class="detail-row">
+              <div class="detail-row delegation">
                 <span class="label">Delegación</span>
                 <span class="value">{{ orderDetails.delivery.delegation }}</span>
               </div>
-              <div class="detail-row">
+              <div class="detail-row store">
                 <span class="label">Tienda</span>
                 <span class="value">{{ orderDetails.delivery.store }}</span>
               </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
     
     <div class="download-invoice">
-      <a href="#" class="invoice-link">Descargar factura <span class="download-icon">↓</span></a>
+      <a href="#" class="invoice-link">
+        Descargar factura
+        <a-logo class="download-icon" [src]="'icons/download.svg'"></a-logo>
+      </a>
     </div>
     
     <div class="back-to-shop">
-      <a routerLink="/super-retail" class="shop-link">Continuar comprando</a>
+      <a routerLink="/super-retail" class="shop-link">Ir al home</a>
     </div>
   </div>
 </div>

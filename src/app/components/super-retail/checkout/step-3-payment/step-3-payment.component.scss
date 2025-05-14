@@ -6,6 +6,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 20px;
+  position: relative;
   
   .checkout-content {
     display: grid;
@@ -15,44 +16,63 @@
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
     }
+
+    .cart-summary {
+      padding-bottom: 0;
+    
+      @media (max-width: 768px) {
+        position: absolute;
+        bottom: 20px;
+      }
+    }
+
+    .cart-actions {
+      position: absolute;
+      bottom: -40px;
+      right: auto;
+      width: 80px;
+      margin-left: 134px;
+
+      @media (max-width: 768px) {
+        bottom: -90px;
+      }
+    }
     
     .checkout-section {
       background-color: white;
       border-radius: 8px;
       padding: 20px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      margin-bottom: 20px;
-      
-      .section-title {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 10px;
-      }
-      
-      .section-description {
-        color: $background-card;
-        font-size: 14px;
-        margin-bottom: 20px;
+    
+      @media (max-width: 768px) {
+        margin-bottom: 420px;
       }
       
       .payment-methods {
         .payment-method {
-          border: 1px solid $border-gray;
-          border-radius: 8px;
-          margin-bottom: 15px;
+          border: 1px solid $cart-border;
+          border-radius: 16px;
+          margin-bottom: 20px;
           overflow: hidden;
-          
+          /*
           .payment-option {
-            padding: 15px;
+            padding: 0 15px;
+            height: 54px;
             display: flex;
             align-items: center;
             
             input[type="radio"] {
               margin-right: 15px;
+              width: 20px;
+              height: 20px;
               
-              &:checked + .payment-label {
+              &:checked {
                 color: $text-default;
-                font-weight: 500;
+              }
+
+              &:checked ~ .checkmark {
+                background-color: #4CAF50;
+                border-color: #4CAF50;
               }
             }
             
@@ -60,39 +80,87 @@
               display: flex;
               align-items: center;
               font-size: 16px;
+              font-weight: 400;
+              line-height: 120%;
+              color: $payment-label;
               cursor: pointer;
-              
-              .payment-icon {
-                width: 30px;
-                height: 30px;
-                margin-right: 10px;
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size: contain;
-                
-                &.card-icon {
-                  background-image: url('/assets/icons/credit-card.svg');
-                }
-                
-                &.points-icon {
-                  background-image: url('/assets/icons/points.svg');
-                }
-                
-                &.digital-icon {
-                  background-image: url('/assets/icons/smartphone.svg');
-                }
-              }
+              gap: 5px;
             }
+          }
+          */
+          .payment-option {
+            padding: 0 15px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            position: relative;
+          }
+          
+          .payment-option input[type="radio"] {
+            display: none; /* Oculta el radio original */
+          }
+          
+          .payment-label {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 400;
+            color: #333;
+            cursor: pointer;
+            gap: 10px;
+            position: relative;
+          }
+          
+          .custom-radio {
+            height: 20px;
+            width: 20px;
+            background-color: $background-white;
+            border: 2px solid $text-dark;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 10px;
+            display: inline-block;
+          }
+          
+          .payment-option input[type="radio"]:checked + .payment-label .custom-radio {
+            background-color: $separator;
+            border: 2px solid $separator;
+          }
+          
+          .custom-radio::after {
+            content: "";
+            position: absolute;
+            display: none;
+          }
+          
+          .payment-option input[type="radio"]:checked + .payment-label .custom-radio::after {
+            display: block;
+          }
+          
+          .payment-label .custom-radio::after {
+            top: 1px;
+            left: 1px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: $separator;
+            position: absolute;
+            border: 2px solid white;
           }
           
           .payment-details {
             background-color: $background-white;
             padding: 15px;
             border-top: 1px solid $border-gray;
+            width: 550px;
+            margin-left: 55px;
             
             .payment-details-text {
-              font-size: 14px;
+              font-size: 12px;
+              font-weight: 400;
+              line-height: 140%;
               margin-bottom: 15px;
+              color: $text-dark-light;
             }
             
             .transfer-code {
@@ -104,9 +172,10 @@
               }
               
               .form-control {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid $border-gray;
+                width: 292px;
+                height: 32px;
+                padding: 0 20px;
+                border: 1px solid $quantity-bottom;
                 border-radius: 4px;
                 font-size: 14px;
                 
@@ -116,122 +185,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    }
-    
-    .cart-summary {
-      background-color: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      align-self: start;
-      
-      .summary-header {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 20px;
-      }
-      
-      .coupon-section {
-        margin-bottom: 20px;
-        
-        .coupon-label {
-          font-size: 14px;
-          margin-bottom: 10px;
-        }
-        
-        .coupon-input-group {
-          display: flex;
-          
-          .coupon-input {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid $border-gray;
-            border-radius: 4px 0 0 4px;
-            font-size: 14px;
-            
-            &:focus {
-              outline: none;
-              border-color: $separator;
-            }
-          }
-          
-          .coupon-button {
-            padding: 10px 15px;
-            background-color: $background-white;
-            border: 1px solid $separator;
-            border-left: none;
-            color: $separator;
-            font-weight: 500;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-            
-            &:hover {
-              background-color: rgba($separator, 0.05);
-            }
-          }
-        }
-      }
-      
-      .price-summary {
-        .summary-row {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 10px;
-          font-size: 14px;
-          
-          .price {
-            font-weight: 500;
-            
-            &.discount {
-              color: #28a745;
-            }
-          }
-          
-          &.total {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid $border-gray;
-            font-size: 18px;
-            font-weight: 600;
-          }
-        }
-      }
-      
-      .navigation-buttons {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-        
-        .back-btn, .continue-btn {
-          padding: 12px;
-          border-radius: 4px;
-          font-size: 16px;
-          font-weight: 500;
-          cursor: pointer;
-        }
-        
-        .back-btn {
-          flex: 1;
-          background-color: $background-white;
-          color: $separator;
-          border: 1px solid $separator;
-          
-          &:hover {
-            background-color: rgba($separator, 0.05);
-          }
-        }
-        
-        .continue-btn {
-          flex: 2;
-          background-color: $separator;
-          color: $text-white;
-          border: none;
-          
-          &:hover {
-            background-color: darken($separator, 5%);
           }
         }
       }
