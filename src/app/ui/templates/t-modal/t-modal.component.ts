@@ -63,6 +63,7 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 	isTyping = false; // Bandera para indicar si está "escribiendo"
 	welcome = true;
 	defaultQuestion: Request[] = [];
+	selectedButtonIndex: number = -1; // Índice del botón seleccionado
 
 	@ViewChild('chatContainer') chatContainer!: ElementRef;
 	@Output() onclose = new EventEmitter<void>();
@@ -90,10 +91,11 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
-	sendDefaultQuestion(question: Request): void {
+	sendDefaultQuestion(question: Request, index: number): void {
 		if (question.prompt) {
+			this.selectedButtonIndex = index;
 			this.welcome = false;
-			this.valueInput = question.prompt;
+			this.valueInput = question.text;
 			this.chats.push({
 				text: this.valueInput,
 				isUser: true

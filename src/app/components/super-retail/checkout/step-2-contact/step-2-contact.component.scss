@@ -3,9 +3,16 @@
 
 .checkout-step {
   width: 100%;
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px;
+  
+  @media (max-width: 780px) {
+    max-width: 100%;
+    padding: 10px;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
   
   .checkout-content {
     display: grid;
@@ -23,6 +30,7 @@
       @media (max-width: 768px) {
         position: absolute;
         bottom: 0;
+        height: 398px;
       }
     }
 
@@ -34,7 +42,7 @@
       margin-left: 134px;
 
       @media (max-width: 768px) {
-        bottom: -90px;
+        bottom: -30px;
       }
     }
     
@@ -45,6 +53,9 @@
       border: 1px solid $cart-border;
       margin-bottom: 0;
       height: 320px;
+      @media (max-width: 768px) {
+        height: 335px;
+      }
       
       .form-grid {
         display: grid;
@@ -92,10 +103,11 @@
     }
 
     .delivery-section {
-      height: 240px;
+      height: 245px;
       margin-bottom: 20px;
       @media (max-width: 768px) {
-        margin-bottom: 400px;
+        margin-bottom: 460px;
+        height: 265px;
       }
     }
   }

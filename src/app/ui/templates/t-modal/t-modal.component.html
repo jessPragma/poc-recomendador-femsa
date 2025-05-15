@@ -3,27 +3,9 @@
 
 <div class="modal-content">
 	<div class="modal-content__borde">
-		<img class="modal-content__borde-img" src="/images/background-lia.svg" alt="" loading="lazy" />
+		<img class="modal-content__borde-img" src="images/header-agent.png" alt="" loading="lazy" />
 	</div>
-	<div
-		[ngClass]="{
-			'modal-content__container-image--default': welcome,
-			'modal-content__container-image--top': !welcome
-		}"
-		class="modal-content__container-image"
-	>
-		<div
-			[ngClass]="{
-				'modal-content__circle--default': welcome,
-				'modal-content__circle--top': !welcome
-			}"
-			class="modal-content__circle modal-content__circle--gray-light"
-		></div>
-		<img class="modal-content__image" src="/images/lia.svg" alt="" loading="lazy" />
-	</div>
-	<button class="modal-content__close" type="button" (click)="handleClose()">
-		<img src="images/close-white.svg" width="25" height="25" alt="" />
-	</button>
+	<button class="modal-content__close" type="button" (click)="handleClose()"></button>
 	<div
 		[ngClass]="{
 			'modal-content__chat--default': welcome,
@@ -35,24 +17,36 @@
 		@if (welcome) {
 			<div class="modal-content__welcome">
 				<div class="modal-content__greeting">
-					Hola! Soy Super Retail,<br />
-					tu asesora de productos IA
-					<p>¿cómo puedo ayudarte hoy?</p>
+					<p>
+						<span>¡Hola! Soy SuperRetail tu asistente de compras.</span>
+						Te ayudo con tus recetas y hago tu compra más rápida. ¿En qué te puedo servir hoy?
+					</p>
 				</div>
+				<!--
 				@for (question of defaultQuestion; track $index) {
 					<a-custom-button
 						[text]="question.prompt"
 						(buttonClick)="sendDefaultQuestion(question)"
 					></a-custom-button>
 				}
+				  -->
 			</div>
 		} @else {
 			<div class="modal-content__chat-ia">
-				<a-card-welcome class="modal-content__welcome"></a-card-welcome>
+				<div class="modal-content__welcome second">
+					<div class="modal-content__greeting">
+						<p>
+							<span>¡Hola! Soy SuperRetail tu asistente de compras.</span>
+							Te ayudo con tus recetas y hago tu compra más rápida. ¿En qué te puedo servir hoy?
+						</p>
+					</div>
+				</div>
 				<a-card-chat [chats]="chats"></a-card-chat>
 				@if (isTyping) {
 					<div class="typing-indicator">
-						<span>Escribiendo...</span>
+						<div class="dot"></div>
+						<div class="dot"></div>
+						<div class="dot"></div>
 					</div>
 				}
 			</div>
@@ -62,6 +56,15 @@
 		class="modal-content__question"
 		[ngClass]="{ 'modal-content__question-button--disabled': isDisableInput }"
 	>
+	<div class="modal-content__question-custom-button">
+		@for (question of defaultQuestion; track $index) {
+			<a-custom-button
+				[text]="question.prompt"
+				[active]="selectedButtonIndex === $index"
+				(buttonClick)="sendDefaultQuestion(question, $index)"
+			></a-custom-button>
+		}
+	</div>
 		<a-custom-input-text
 			#inputText
 			(debouncedInput)="handleDebouncedInput($event)"
@@ -70,7 +73,7 @@
 		></a-custom-input-text>
 		<img
 			class="modal-content__question-button"
-			src="/images/send.svg"
+			src="icons/icon-send.svg"
 			alt=""
 			(click)="sendQuestion()"
 			(keydown.enter)="sendQuestion()"

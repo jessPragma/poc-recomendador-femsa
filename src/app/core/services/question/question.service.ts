@@ -17,17 +17,20 @@ export class QuestionService {
 			{
 				user_id: this.user()?.usuario || '',
 				session_id: this.user()?.sessionId || '',
-				prompt: '¿Puedo comprar sin estar registrado en la página?'
+				prompt: 'Recetas',
+				text: 'Sorpréndeme con una receta fácil.'
 			},
 			{
 				user_id: this.user()?.usuario || '',
 				session_id: this.user()?.sessionId || '',
-				prompt: '¿Cuál es el costo de envío?'
+				prompt: 'Productos',
+				text: 'Dame opciones rápidas para comprar'
 			},
 			{
 				user_id: this.user()?.usuario || '',
 				session_id: this.user()?.sessionId || '',
-				prompt: '¿Con qué medios puedo pagar?'
+				prompt: 'Preguntas frecuentes',
+				text: 'Tengo dudas, ¿puedo ver las preguntas frecuentes?'
 			}
 		];
 	}

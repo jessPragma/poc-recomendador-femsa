@@ -1,1 +1,22 @@
 @use 'assets/scss/main';
+
+/* Estilos globales para evitar scroll horizontal */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Aplicar box-sizing: border-box a todos los elementos */
+* {
+  box-sizing: border-box;
+}
+
+/* Reglas específicas para páginas de checkout */
+.checkout-container,
+.checkout-step,
+.checkout-content,
+.checkout-section,
+.cart-summary {
+  max-width: 100%;
+  overflow-x: hidden;
+}
