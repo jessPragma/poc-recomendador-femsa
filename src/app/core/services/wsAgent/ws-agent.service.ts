@@ -68,6 +68,7 @@ export class WsAgentService {
 				message: message
 			}
 		};
+		console.log('Enviando mensaje al WebSocket:', JSON.stringify(webSocketMessage));
 		this.socket.send(JSON.stringify(webSocketMessage));
 	}
 
