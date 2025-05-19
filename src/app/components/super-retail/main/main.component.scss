@@ -1,6 +1,8 @@
 @import 'main';
 .main-olimpica {
 	display: grid;
+	max-width: 1920px;
+	margin: auto;
 
 	&__main {
 		display: grid;

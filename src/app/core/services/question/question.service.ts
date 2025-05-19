@@ -15,20 +15,20 @@ export class QuestionService {
 		this.user.set(this.userService.getUser());
 		return [
 			{
-				user_id: this.user()?.usuario || '',
-				session_id: this.user()?.sessionId || '',
+				user_id: this.user()?.usuario || 'user-id-test',
+				session_id: this.user()?.sessionId || 'user-session-test',
 				prompt: 'Recetas',
 				text: 'Sorpréndeme con una receta fácil.'
 			},
 			{
-				user_id: this.user()?.usuario || '',
-				session_id: this.user()?.sessionId || '',
+				user_id: this.user()?.usuario || 'user-id-test',
+				session_id: this.user()?.sessionId || 'user-session-test',
 				prompt: 'Productos',
 				text: 'Dame opciones rápidas para comprar'
 			},
 			{
-				user_id: this.user()?.usuario || '',
-				session_id: this.user()?.sessionId || '',
+				user_id: this.user()?.usuario || 'user-id-test',
+				session_id: this.user()?.sessionId || 'user-session-test',
 				prompt: 'Preguntas frecuentes',
 				text: 'Tengo dudas, ¿puedo ver las preguntas frecuentes?'
 			}
