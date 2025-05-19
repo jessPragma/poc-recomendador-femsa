@@ -339,12 +339,19 @@
   @media (max-width: 768px) {
 	right: auto;
 	left: auto;
+	gap: 35px;
 	margin-bottom: 50px;
 	width: 100%;
 	
 	.add-more-btn, .empty-cart-btn {
 		margin: auto;
 	}
+  }
+
+  @media (min-width: 768px) and (max-width: 1080px) {
+	right: 0;
+	bottom: 0;
+	gap: 20px;
   }
 	
 	.add-more-btn, .empty-cart-btn {

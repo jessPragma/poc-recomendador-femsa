@@ -32,6 +32,10 @@
         bottom: 0;
         height: 398px;
       }
+
+      @media (min-width: 800px) and (max-width: 1080px) {
+        min-height: 380px;
+      }
     }
 
     .cart-actions {
@@ -41,8 +45,16 @@
       width: 80px;
       margin-left: 134px;
 
-      @media (max-width: 768px) {
+      @media (max-width: 500px) {
         bottom: -30px;
+      }
+
+      @media (min-width: 500px) and (max-width: 1080px) {
+        bottom: -30px;
+      }
+
+      @media (min-width: 800px) and (max-width: 1080px) {
+        bottom: 0;
       }
     }
     

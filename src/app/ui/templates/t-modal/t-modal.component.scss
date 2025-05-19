@@ -35,6 +35,13 @@
 	border-radius: 0; /* No border radius on mobile */
 	color: $text-dark;
 
+	@media (min-width: 600px) and (max-width: 1080px) {
+		position: absolute;
+		width: 400px;
+		height: 100vh;
+		box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+	}
+
 	&__close {
 		position: absolute;
 		top: 0;

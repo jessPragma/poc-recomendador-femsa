@@ -14,8 +14,10 @@
 	display: flex;
 	flex-direction: column;
 	
-	@include from($tablet) {
+	@media (min-width: 600px) and (max-width: 1080px) {
+		position: absolute;
 		width: 400px;
+		height: 160vh;
 		box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
 	}
 	
