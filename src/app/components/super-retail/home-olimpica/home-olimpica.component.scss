@@ -8,8 +8,8 @@
 		row-gap: 2rem;
 		&__image {
 			border-radius: 0px 0px 50% 50%;
-			width: 60px;
-			height: 60px;
+			width: 80px;
+			height: 80px;
 		}
 
 		&__circle {
@@ -47,10 +47,10 @@
 			margin: 0 auto;
 			position: fixed;
 			right: 0;
-			top: 80%;
+			top: 75%;
 			display: inline-block;
 			z-index: 1;
-			width: 100px;
+			width: 130px;
 			height: auto;
 			cursor: pointer;
 		}
@@ -76,8 +76,8 @@
 			}
 
 			&__image {
-				width: auto;
-				height: auto;
+				width: 130px;
+				height: 130px;
 			}
 
 			&__circle {
