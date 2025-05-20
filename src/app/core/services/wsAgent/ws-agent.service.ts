@@ -27,19 +27,16 @@ export class WsAgentService {
 
 		// Al recibir un mensaje
 		this.socket.onmessage = (event) => {
-			debugger;
 			this.messageSubject.next(event.data);
 		};
 
 		// Al ocurrir un error
 		this.socket.onerror = (event) => {
-			debugger;
 			console.error('Error observado en el WebSocket:', event);
 		};
 
 		// Al cerrar la conexión
 		this.socket.onclose = (event) => {
-			debugger;
 			console.log('WebSocket cerrado:', event);
 		};
 	}
@@ -49,7 +46,6 @@ export class WsAgentService {
 	}
 
 	public sendMessage(message: string): void {
-		debugger;
 		if (this.socket.readyState === WebSocket.OPEN) {
 			this.sendFormattedMessage(message);
 		} else {
@@ -58,7 +54,6 @@ export class WsAgentService {
 	}
 
 	private sendFormattedMessage(message: string): void {
-		debugger;
 		const webSocketMessage: WebSocketMessage = {
 			service: 'chat',
 			action: 'sendMessage',

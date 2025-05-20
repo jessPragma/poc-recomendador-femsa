@@ -238,9 +238,17 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		// Mapear cada línea para detectar y formatear listas
 		lines.forEach((line) => {
 			const trimmedLine = line.trim();
-	
+			if (trimmedLine.startsWith('{"message":') || trimmedLine.startsWith(' {"message":')) {
+				formattedListItems.push(`<li>Continuamos trabajando en tu solicitud...</li>`);
+			}
+			else if (trimmedLine.startsWith('- Imagen') || trimmedLine.startsWith('- URL') || trimmedLine.startsWith('- **Imagen:**') || trimmedLine.startsWith('- **URL ')) {
+				formattedListItems.push(`<li>
+					<img src="https://${trimmedLine.split('https://')[2]}" alt="" style="max-width: 50%;margin: auto;border-radius: 10px;" />
+				</li>`);
+				return;
+			}
 			// Verificar si es una lista de puntos (• o -)
-			if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-')) {
+			else if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-')) {
 				formattedListItems.push(`<li>${trimmedLine}</li>`);
 				isOrderedList = false;
 			}
