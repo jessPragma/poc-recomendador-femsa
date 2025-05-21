@@ -270,83 +270,105 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	addToCart(product: any): void {
-		this.cartItems.push(product);
 		this.updateCartCount();
+		
+		// Asegurarse de que existe el elemento de la insignia del carrito
+		const cartIcon = document.querySelector('.cart-icon') || document.querySelector('.icon-cart');
+		if (cartIcon && !document.querySelector('.cart-badge')) {
+			const badge = document.createElement('span');
+			badge.className = 'cart-badge';
+			badge.textContent = this.cartCount.toString();
+			badge.style.display = this.cartCount > 0 ? 'block' : 'none';
+			cartIcon.appendChild(badge);
+		}
+	} catch (error) {
+		console.error('Error al inicializar el contador del carrito:', error);
 	}
+}
 
-	private formatMessageAsList(message: string): string {
-		console.log(message);
-		const lines = message.split('\n');
-		
-		// Arrays para almacenar las líneas formateadas
-		const formattedListItems: string[] = [];
-		let isOrderedList = false;
-		
-		// Detectar productos en el mensaje
-		const products = this.extractProductsFromMessage(message);
-		
-		// Si hay productos, crear tarjetas de producto
-		if (products.length > 0) {
-			const productCardsHtml = this.createProductCardsHtml(products);
-			formattedListItems.push(productCardsHtml);
-		}
-		
-		// Procesar el resto del mensaje
-		lines.forEach((line) => {
-			const trimmedLine = line.trim();
-			// Saltarse las líneas que ya fueron procesadas como productos
-			if (trimmedLine.startsWith('- nombre:') || 
-				trimmedLine.startsWith('- precio:') || 
-				trimmedLine.startsWith('url_imagen:') ||
-				trimmedLine.startsWith('- url_imagen:')) {
-				return;
-			}
-			
-			if (trimmedLine.startsWith('{"message":') || trimmedLine.startsWith(' {"message":')) {
-				formattedListItems.push(`<li>Continuamos trabajando en tu solicitud...</li>`);
-			}
-			else if (trimmedLine.startsWith('- Imagen') || trimmedLine.startsWith('- URL') || trimmedLine.startsWith('- **Imagen:**') || trimmedLine.startsWith('- **URL ')) {
-				formattedListItems.push(`<li>
-					<img src="https://${trimmedLine.split('https://')[2]}" alt="" style="max-width: 50%;margin: auto;border-radius: 10px;" />
-				</li>`);
-				return;
-			}
-			// Verificar si es una lista de puntos (• o -)
-			else if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-')) {
-				formattedListItems.push(`<li>${trimmedLine}</li>`);
-				isOrderedList = false;
-			}
-			// Verificar si es una lista numerada (inicia con "1.", "2.", etc.)
-			else if (/^\d+\./.test(trimmedLine)) {
-				formattedListItems.push(`<li>${trimmedLine}</li>`);
-				isOrderedList = true;
-			}
-			// Mantener las líneas no relacionadas con listas sin formato
-			else {
-				formattedListItems.push(trimmedLine);
-			}
-		});
-		
-		// Envolver las líneas formateadas en <ul> o <ol> si contienen elementos de lista
-		if (formattedListItems.some(line => line.startsWith('<li>'))) {
-			return isOrderedList 
-				? `<ol>${formattedListItems.join('\n')}</ol>` 
-				: `<ul>${formattedListItems.join('\n')}</ul>`;
-		}
-		
-		// Si solo hay productos y no elementos de lista, devolver solo las tarjetas de producto
-		if (products.length > 0) {
-			return formattedListItems.join('\n');
-		}
-		
-		// Si no contiene elementos de lista ni productos, devolver el mensaje sin modificar
-		return message;
+updateCartCount(): void {
+	this.cartCount = this.cartItems.length;
+	// Actualizar el contador del carrito en el header
+	const cartBadge = document.querySelector('.cart-badge') as HTMLElement;
+	if (cartBadge) {
+		cartBadge.textContent = this.cartCount.toString();
+		cartBadge.style.display = this.cartCount > 0 ? 'block' : 'none';
+	}
+}
+
+addToCart(product: any): void {
+	this.cartItems.push(product);
+	this.updateCartCount();
+}
+
+private formatMessageAsList(message: string): string {
+	// Detectar productos en el mensaje
+	const products = this.extractProductsFromMessage(message);
+	
+	// Eliminar la tabla HTML del mensaje original si existe
+	let modifiedMessage = message;
+	if (message.includes('<table>') && message.includes('</table>')) {
+		modifiedMessage = message.replace(/<table>[\s\S]*?<\/table>/g, '');
 	}
 	
-	private extractProductsFromMessage(message: string): any[] {
-		const products: any[] = [];
-		const lines = message.split('\n');
+	// Procesar el mensaje sin la tabla HTML
+	const lines = modifiedMessage.split('\n');
+	
+	// Arrays para almacenar las líneas formateadas
+	const formattedListItems: string[] = [];
+	let isOrderedList = false;
+	
+	// Si hay productos, crear tarjetas de producto
+	if (products.length > 0) {
+		const productCardsHtml = this.createProductCardsHtml(products);
+		formattedListItems.push(productCardsHtml);
+	}
+	
+	// Procesar el resto del mensaje
+	lines.forEach((line) => {
+		const trimmedLine = line.trim();
+		// Saltarse las líneas que ya fueron procesadas como productos
+		if (trimmedLine.startsWith('- nombre:') || 
+			trimmedLine.startsWith('- precio:') || 
+			trimmedLine.startsWith('url_imagen:') ||
+			trimmedLine.startsWith('- url_imagen:') ||
+			trimmedLine.includes('<img src=') ||
+			trimmedLine.includes('Producto:') ||
+			trimmedLine.includes('Precio:')) {
+			return;
+		}
 		
+		if (trimmedLine.startsWith('{"message":') || trimmedLine.startsWith(' {"message":')) {
+			formattedListItems.push(`<li>Continuamos trabajando en tu solicitud...</li>`);
+		}
+		else if (trimmedLine.startsWith('- Imagen') || trimmedLine.startsWith('- URL') || 
+			trimmedLine.startsWith('- **Imagen:**') || trimmedLine.startsWith('- **URL ')) {
+			const imgMatch = trimmedLine.match(/https?:\/\/\S+/);
+			if (imgMatch) {
+				formattedListItems.push(`<li>
+					<img src="${imgMatch[0]}" alt="" style="max-width: 50%;margin: auto;border-radius: 10px;" />
+				</li>`);
+			}
+			return;
+		}
+		// Verificar si es una lista de puntos (• o -)
+		else if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-')) {
+			formattedListItems.push(`<li>${trimmedLine}</li>`);
+			isOrderedList = false;
+		}
+		// Verificar si es una lista numerada (inicia con "1.", "2.", etc.)
+		else if (/^\d+\./.test(trimmedLine)) {
+			formattedListItems.push(`<li>${trimmedLine}</li>`);
+			isOrderedList = true;
+		
+		// Verificar si el mensaje contiene tabla HTML de productos
+		if (message.includes('<table>') && message.includes('</table>')) {
+			// Extraer productos de la tabla HTML
+			return this.extractProductsFromTable(message);
+		}
+
+		// Formato anterior (texto plano con guiones)
+		const lines = message.split('\n');
 		let currentProduct: any = {};
 		
 		for (let i = 0; i < lines.length; i++) {
@@ -380,6 +402,51 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		// Agregar el último producto si quedó pendiente
 		if (Object.keys(currentProduct).length > 0 && currentProduct.name) {
 			products.push(currentProduct);
+		}
+		
+		return products;
+	}
+	
+	private extractProductsFromTable(message: string): any[] {
+		const products: any[] = [];
+		
+		// Extraer la parte del mensaje que contiene la tabla
+		const tableMatch = message.match(/<table>([\s\S]*?)<\/table>/i);
+		if (!tableMatch || !tableMatch[1]) return products;
+		
+		const tableContent = tableMatch[1];
+		
+		// Extraer filas de la tabla
+		const rowRegex = /<tr>([\s\S]*?)<\/tr>/gi;
+		let rowMatch;
+		
+		while ((rowMatch = rowRegex.exec(tableContent)) !== null) {
+			const rowContent = rowMatch[1];
+			
+			// Extraer imagen
+			const imgMatch = rowContent.match(/<img src="([^"]+)"/i);
+			if (!imgMatch || !imgMatch[1]) continue;
+			
+			const imageUrl = imgMatch[1];
+			
+			// Extraer nombre del producto
+			const productNameMatch = rowContent.match(/Producto:<\/p>\s*<p[^>]*>([^<]+)<\/p>/i);
+			if (!productNameMatch || !productNameMatch[1]) continue;
+			
+			const productName = productNameMatch[1].trim();
+			
+			// Extraer precio
+			const priceMatch = rowContent.match(/Precio:<\/p>\s*<p[^>]*>\$([^<]+)<\/p>/i);
+			if (!priceMatch || !priceMatch[1]) continue;
+			
+			const price = '$' + priceMatch[1].trim();
+			
+			// Agregar producto a la lista
+			products.push({
+				name: productName,
+				price: price,
+				imageUrl: imageUrl
+			});
 		}
 		
 		return products;
