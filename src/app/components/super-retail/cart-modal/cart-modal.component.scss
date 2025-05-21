@@ -27,10 +27,12 @@
 	
 	&--open {
 		right: 0;
-
-	@media (min-width: 1921px) {
-		right: calc(1920px - 110vh);
-	}
+		
+		@media (min-width: 1921px) {
+			// Para pantallas grandes, el cart-modal debe alinearse con el borde derecho del contenedor de 1920px
+			// Calculamos la posición desde la derecha como: (ancho de viewport - 1920px) / 2
+			right: calc((100vw - 1920px) / 2);
+		}
 	}
 	
 	&__header {
