@@ -19,7 +19,7 @@ export class HeaderSuperRetailComponent {
     discount = 0;
     total = 0;
   
-    constructor(private cartService: CartService) {}
+    constructor(public cartService: CartService) {}
   
     ngOnInit(): void {
       // Suscribirse a los cambios del carrito
