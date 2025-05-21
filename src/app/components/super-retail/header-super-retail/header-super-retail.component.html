@@ -17,6 +17,9 @@
 		</div>
 		<div class="header-super-retail__shopping" (click)="toggleCartModal()">
 			<a-logo [src]="'icons/car.svg'"></a-logo>
+			<div class="header-super-retail__shopping-count">
+				{{ cartService.getCartCount() }}
+			</div>
 		</div>
 	</div>
 </header>

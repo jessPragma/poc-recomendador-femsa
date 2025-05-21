@@ -9,7 +9,7 @@
           <p class="second-detail">Cantidad</p>
           <p class="third-detail">Valor</p>
         </div>
-        <div class="product-row" *ngFor="let product of orderDetails.products">
+        <div class="product-row" *ngFor="let product of products">
           <p class="first-detail">{{ product.name }}</p>
           <p class="second-detail">{{ product.quantity }}</p>
           <p class="third-detail">${{ product.price.toFixed(2) }}</p>
@@ -17,7 +17,7 @@
         <div class="total-row">
           <p></p>
           <p class="second-detail">Total</p>
-          <p class="third-detail">${{ orderDetails.total.toFixed(2) }}</p>
+          <p class="third-detail">${{ total.toFixed(2) }}</p>
         </div>
       </div>
       

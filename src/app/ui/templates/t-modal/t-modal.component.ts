@@ -13,7 +13,9 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { QuestionRequest, Request } from '@core/interfaces/question.interface';
 import { UserBankia } from '@core/interfaces/user-bankia.interface';
+import { CartItem } from '@core/models/cart-item.model';
 import { AgentService } from '@core/services/agent/agent.service';
+import { CartService } from '@core/services/cart/cart.service';
 import { QuestionService } from '@core/services/question/question.service';
 import { TextService } from '@core/services/text/text.service';
 import { UserService } from '@core/services/user/user.service';
@@ -37,6 +39,7 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 	private readonly questionService = inject(QuestionService);
 	private readonly formatTextService = inject(TextService);
 	private readonly sanitizer = inject(DomSanitizer);
+	private readonly cartService = inject(CartService);
 
 	user: UserBankia = this.userService.getUser();
 	messages$!: Observable<string>; // Observable para los mensajes
@@ -234,33 +237,30 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.isInputEmpty = true;
 	}
 
-	// Variable para seguimiento del carrito
-	cartItems: any[] = [];
+	// Variables para seguimiento del carrito
+	cartItems: CartItem[] = [];
 	cartCount: number = 0;
 
 	initializeCartBadge(): void {
-		// Verificar si hay productos en localStorage
-		try {
-			const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-			this.cartItems = cartItems;
+		// Suscribirse a los cambios del carrito usando el servicio
+		this.cartService.cartItems$.subscribe(items => {
+			this.cartItems = items;
 			this.updateCartCount();
-			
-			// Asegurarse de que existe el elemento de la insignia del carrito
-			const cartIcon = document.querySelector('.cart-icon') || document.querySelector('.icon-cart');
-			if (cartIcon && !document.querySelector('.cart-badge')) {
-				const badge = document.createElement('span');
-				badge.className = 'cart-badge';
-				badge.textContent = this.cartCount.toString();
-				badge.style.display = this.cartCount > 0 ? 'block' : 'none';
-				cartIcon.appendChild(badge);
-			}
-		} catch (error) {
-			console.error('Error al inicializar el contador del carrito:', error);
+		});
+		
+		// Asegurarse de que existe el elemento de la insignia del carrito
+		const cartIcon = document.querySelector('.cart-icon') || document.querySelector('.icon-cart');
+		if (cartIcon && !document.querySelector('.cart-badge')) {
+			const badge = document.createElement('span');
+			badge.className = 'cart-badge';
+			badge.textContent = this.cartCount.toString();
+			badge.style.display = this.cartCount > 0 ? 'block' : 'none';
+			cartIcon.appendChild(badge);
 		}
 	}
 
 	updateCartCount(): void {
-		this.cartCount = this.cartItems.length;
+		this.cartCount = this.cartService.getTotalUnits();
 		// Actualizar el contador del carrito en el header
 		const cartBadge = document.querySelector('.cart-badge') as HTMLElement;
 		if (cartBadge) {
@@ -270,8 +270,19 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	addToCart(product: any): void {
-		this.cartItems.push(product);
-		this.updateCartCount();
+		// Convertir el producto al formato CartItem
+		const cartItem: CartItem = {
+			id: Math.random().toString(36).substring(2, 15),
+			name: product.name,
+			brand: product.brand || 'GENERIC',
+			price: parseFloat(product.price.replace(/[^0-9.-]+/g, '')),
+			quantity: 1,
+			image: product.imageUrl,
+			discount: 0
+		};
+		
+		// Agregar el producto al carrito usando el servicio
+		this.cartService.addToCart(cartItem);
 	}
 
 	private formatMessageAsList(message: string): string {
@@ -514,19 +525,8 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		<script>
 			document.addEventListener('addToCart', function(e) {
 				const product = e.detail;
-				// Agregar al carrito
-				const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-				cartItems.push(product);
-				localStorage.setItem('cartItems', JSON.stringify(cartItems));
 				
-				// Actualizar contador del carrito
-				const cartBadge = document.querySelector('.cart-badge');
-				if (cartBadge) {
-					cartBadge.textContent = cartItems.length;
-					cartBadge.style.display = 'block';
-				}
-				
-				// Notificar a Angular
+				// Notificar a Angular para usar el servicio de carrito
 				if (window.angularComponentRef) {
 					window.angularComponentRef.addToCart(product);
 				}

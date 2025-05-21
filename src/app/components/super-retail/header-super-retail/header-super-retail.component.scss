@@ -160,6 +160,16 @@
 		display: none;
 	}
 
+	&__shopping-count {
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		background-color: blue;
+		color: white;
+		text-align: center;
+		line-height: 20px;
+	}
+
 	@include from($laptop) {
 		grid-template-columns: 25% 42% 25%;
 		grid-template-areas: "logo search options";

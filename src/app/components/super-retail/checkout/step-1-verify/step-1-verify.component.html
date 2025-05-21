@@ -37,17 +37,21 @@
           <div class="product-details">
             <div class="product-brand">Marca</div>
             <div class="product-brand-name">{{ product.brand }}</div>
-            <div class="product-name">{{ product.name }} {{ product.size }}</div>
+            <div class="product-name">{{ product.name }}</div>
           </div>
           <div class="product-quantity">
-            <button class="quantity-btn quantity-btn--minus">−</button>
-            <input type="text" [value]="product.quantity" class="quantity-input">
-            <button class="quantity-btn quantity-btn--plus">+</button>
+            <button class="quantity-btn quantity-btn--minus" (click)="decreaseQuantity(product.id)">−</button>
+            <input type="text" [value]="product.quantity" class="quantity-input" readonly>
+            <button class="quantity-btn quantity-btn--plus" (click)="increaseQuantity(product.id)">+</button>
           </div>
           <div class="product-price">${{ product.price.toFixed(2) }}</div>
-          <div class="remove-btn">
+          <div class="remove-btn" (click)="removeItem(product.id)">
             <a-logo [src]="'icons/trash.svg'"></a-logo>
           </div>
+        </div>
+        
+        <div class="empty-cart-message" *ngIf="products.length === 0">
+          <p>No hay productos en el carrito</p>
         </div>
       </div>
     </div>
@@ -85,11 +89,11 @@
     </div>
 
     <div class="cart-actions">
-      <button class="add-more-btn">
+      <button class="add-more-btn" routerLink="/super-retail">
         Añadir más productos
         <span class="plus-icon">&nbsp;&nbsp;+</span>
       </button>
-      <button class="empty-cart-btn">
+      <button class="empty-cart-btn" (click)="clearCart()" [disabled]="products.length === 0">
         Vaciar carrito
         <a-logo class="empty-cart-icon" [src]="'icons/delete.svg'"></a-logo>
       </button>

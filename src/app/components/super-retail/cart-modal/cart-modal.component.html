@@ -1,59 +1,39 @@
 <!-- Cart Modal -->
 <div class="cart-modal" [class.cart-modal--open]="isOpen">
 	<div class="cart-modal__header">
-		<h3 class="cart-modal__title">Tiene 4 unidades</h3>
+		<h3 class="cart-modal__title">Tiene {{ totalUnits }} unidades</h3>
 		<div class="cart-modal__close" (click)="closeModal()">
 			<span class="close-icon">✕</span>
 		</div>
 	</div>
 	
 	<div class="cart-modal__content">
-		<div class="cart-item">
+		<div class="cart-item" *ngFor="let item of cartItems">
 			<div class="cart-item__image">
-				<img src="images/product1.png" alt="Jumex">
+				<img [src]="item.image" [alt]="item.name">
 			</div>
 			<div class="cart-item__details">
 				<div class="cart-item__info">
 					<div class="cart-item__brand-label">Marca</div>
-					<div class="cart-item__brand">JUMEX</div>
-					<div class="cart-item__name">Jugo de naranja 1 L</div>
+					<div class="cart-item__brand">{{ item.brand }}</div>
+					<div class="cart-item__name">{{ item.name }}</div>
 				</div>
 				<div class="cart-item__controls">
 					<div class="cart-item__quantity">
-						<button class="quantity-btn quantity-btn--minus">−</button>
-						<input type="text" class="quantity-input" value="3">
-						<button class="quantity-btn quantity-btn--plus">+</button>
+						<button class="quantity-btn quantity-btn--minus" (click)="decreaseQuantity(item.id)">−</button>
+						<input type="text" class="quantity-input" [value]="item.quantity" readonly>
+						<button class="quantity-btn quantity-btn--plus" (click)="increaseQuantity(item.id)">+</button>
 					</div>
-					<div class="cart-item__price">$35.00</div>
+					<div class="cart-item__price">${{ item.price.toFixed(2) }}</div>
 				</div>
 			</div>
-			<div class="cart-item__delete">
+			<div class="cart-item__delete" (click)="removeItem(item.id)">
 				<a-logo [src]="'icons/trash.svg'"></a-logo>
 			</div>
 		</div>
 		
-		<div class="cart-item">
-			<div class="cart-item__image">
-				<img src="images/product2.png" alt="Hornitos">
-			</div>
-			<div class="cart-item__details">
-				<div class="cart-item__info">
-					<div class="cart-item__brand-label">Marca</div>
-					<div class="cart-item__brand">Hornitos Reposado</div>
-					<div class="cart-item__name">Tequila 700 ML</div>
-				</div>
-				<div class="cart-item__controls">
-					<div class="cart-item__quantity">
-						<button class="quantity-btn quantity-btn--minus">−</button>
-						<input type="text" class="quantity-input" value="1">
-						<button class="quantity-btn quantity-btn--plus">+</button>
-					</div>
-					<div class="cart-item__price">$367.00</div>
-				</div>
-			</div>
-			<div class="cart-item__delete">
-				<a-logo [src]="'icons/trash.svg'"></a-logo>
-			</div>
+		<div class="cart-empty" *ngIf="cartItems.length === 0">
+			<p>El carrito está vacío</p>
 		</div>
 	</div>
 	
@@ -61,15 +41,15 @@
 		<div class="cart-summary">
 			<div class="cart-summary__row">
 				<span class="cart-summary__label">Subtotal</span>
-				<span class="cart-summary__value">$402.00</span>
+				<span class="cart-summary__value">${{ subtotal.toFixed(2) }}</span>
 			</div>
 			<div class="cart-summary__row">
 				<span class="cart-summary__label">Descuentos</span>
-				<span class="cart-summary__value">− $9.00</span>
+				<span class="cart-summary__value">− ${{ discount.toFixed(2) }}</span>
 			</div>
 			<div class="cart-summary__row cart-summary__row--total">
 				<span class="cart-summary__label">Total</span>
-				<span class="cart-summary__value">$393.00</span>
+				<span class="cart-summary__value">${{ total.toFixed(2) }}</span>
 			</div>
 			<button class="checkout-button" (click)="goToCheckout()">Ir al checkout</button>
 		</div>

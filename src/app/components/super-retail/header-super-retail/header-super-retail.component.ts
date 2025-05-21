@@ -3,6 +3,8 @@ import { AtomsModule } from '@ui/atoms/atoms.module';
 import { OrganismsModule } from '@ui/organisms/organisms.module';
 import { ASeparatorComponent } from "../../../ui/atoms/a-separator/a-separator.component";
 import { CartModalComponent } from "../cart-modal/cart-modal.component";
+import { CartService } from '@core/services/cart/cart.service';
+import { CartItem } from '@core/models/cart-item.model';
 
 @Component({
   selector: 'app-header-super-retail',
@@ -12,6 +14,30 @@ import { CartModalComponent } from "../cart-modal/cart-modal.component";
   styleUrl: './header-super-retail.component.scss'
 })
 export class HeaderSuperRetailComponent {
+  products: CartItem[] = [];
+    subtotal = 0;
+    discount = 0;
+    total = 0;
+  
+    constructor(private cartService: CartService) {}
+  
+    ngOnInit(): void {
+      // Suscribirse a los cambios del carrito
+      this.cartService.cartItems$.subscribe(items => {
+        this.products = items;
+        this.updateTotals();
+      });
+    }
+  
+    /**
+     * Actualiza los totales del carrito
+     */
+    updateTotals(): void {
+      this.subtotal = this.cartService.getSubtotal();
+      this.discount = this.cartService.getTotalDiscount();
+      this.total = this.cartService.getTotal();
+    }
+
   isSidebarOpen = false;
   isCartOpen = false;
 
