@@ -60,6 +60,12 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		// Exponer el componente para interacción con JavaScript
 		(window as any).angularComponentRef = this;
 		
+		// Agregar un listener global para los eventos de addToCart
+		document.addEventListener('addToCart', (e: any) => {
+			console.log('Evento addToCart recibido:', e.detail);
+			this.addToCart(e.detail);
+		});
+		
 		// Inicializar el contador del carrito si hay productos en localStorage
 		this.initializeCartBadge();
 	}
@@ -289,19 +295,30 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	addToCart(product: any): void {
+		console.log('Agregando producto al carrito:', product);
+		
 		// Convertir el producto al formato CartItem
 		const cartItem: CartItem = {
 			id: Math.random().toString(36).substring(2, 15),
 			name: product.name,
-			brand: product.brand || 'GENERIC',
+			// Usar siempre 'Generic' como marca por defecto
+			brand: 'Generic',
+			// Extraer solo números del precio (quitar signos de moneda)
 			price: parseFloat(product.price.replace(/[^0-9.-]+/g, '')),
-			quantity: 1,
+			quantity: product.quantity || 1,
 			image: product.imageUrl,
+			// Descuento siempre en $0
 			discount: 0
 		};
 		
 		// Agregar el producto al carrito usando el servicio
 		this.cartService.addToCart(cartItem);
+		
+		// Actualizar el contador del carrito
+		this.updateCartCount();
+		
+		// Mostrar confirmación visual
+		this.showAddToCartConfirmation(product.name);
 	}
 
 	private formatMessageAsList(message: string): string {
@@ -375,9 +392,16 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		const lines = message.split('\n');
 		
 		let currentProduct: any = {};
+		let foundProductSection = false;
 		
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i].trim();
+			
+			// Detectar sección de productos
+			if (line.match(/^PRODUCTOS?:?$/i)) {
+				foundProductSection = true;
+				continue;
+			}
 			
 			// Comprobar diferentes formatos para el nombre del producto (mayúsculas/minúsculas)
 			if (line.match(/^-\s*Nombre:/i)) {
@@ -388,6 +412,7 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 				}
 				
 				currentProduct.name = line.replace(/^-\s*Nombre:/i, '').trim();
+				foundProductSection = true; // Si encontramos un nombre de producto, estamos en sección de productos
 			} 
 			// Comprobar diferentes formatos para el precio (mayúsculas/minúsculas)
 			else if (line.match(/^-\s*Precio:/i)) {
@@ -425,17 +450,16 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 			return '';
 		}
 		// Contenedor para todas las tarjetas de productos
-		let html = `<div class="product-grid">`;
+		let html = `<div class="product-grid" id="product-container">`;
 		
 		// Crear tarjeta para cada producto
 		products.forEach((product, index) => {
+			const productId = `product-${Date.now()}-${index}`;
 			html += `
-		<div class="chat-item">
+		<div class="chat-item" data-product-id="${productId}">
 			<div class="chat-item__image"><img src="${product.imageUrl}" alt="${product.name}" style="max-width: 100%; max-height: 100px; object-fit: contain;"></div>
 			<div class="chat-item__details">
 				<div>
-					<div class="chat-item__brand-label">Marca</div>
-					<div class="chat-item__brand">GENERIC</div>
 					<div class="chat-item__name">${product.name}</div>
 				</div>
 				<div class="chat-item__controls">
@@ -448,29 +472,32 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 				</div>
 			</div>
 			<div class="chat-item__delete"><a-logo ng-reflect-src="icons/trash.svg"><figure><img title="logo" src="icons/trash.svg"></figure></a-logo></div>
-			<button class="chat-item__add-btn" onclick="document.dispatchEvent(new CustomEvent('addToCart', { detail: {name: '${product.name}', price: '${product.price}', imageUrl: '${product.imageUrl}'} }))">Agregar</button>
+			<button class="chat-item__add-btn" data-product-id="${productId}" onclick="document.dispatchEvent(new CustomEvent('addToCart', { detail: {name: '${product.name}', price: '${product.price}', imageUrl: '${product.imageUrl}', brand: 'Generic', discount: 0, quantity: 1} }))">Agregar</button>
 		</div>`;
 		});
 		
 		html += `</div>
 		<style>
 			.chat-item {
-				display: flex;
-				width: 310px;
-				height: 170px;
+				display: grid;
+				grid-template-columns: 30% 40% 30%;
+				width: 295px;
+				height: 135px;
 				margin: auto;
 				position: relative;
 				border-bottom: 1px solid #DBDBDB;
-				padding: 15px 0 20PX 0;
+				padding: 10px 0 10px 0;
+				background-color: #ffffff;
 			}
 			.chat-item__image {
-				width: 130px;
+				width: 105px;
 				height: 100px;
 				object-fit: contain;
 				background-color: #ffffff;
 				display: flex;
 				align-items: center;
 				justify-content: center;
+				border-radius: 5px;
 			}
 			.chat-item__details {
 				flex: 1;
@@ -493,7 +520,7 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 				margin-bottom: 10px;
 			}
 			.chat-item__name {
-				font-size: 12px;
+				font-size: 11px;
 			}
 			.chat-item__controls {
 				display: flex;
@@ -510,8 +537,8 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 			.chat-item__quantity .quantity-btn {
 				background: none;
 				border: 1px solid #DBDBDB;
-				width: 24px;
-				height: 24px;
+				width: 20px;
+				height: 20px;
 				border-radius: 3px;
 				display: flex;
 				align-items: center;
@@ -521,8 +548,8 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 				color: #B6B6BA;
 			}
 			.chat-item__quantity input {
-				width: 75px;
-				height: 28px;
+				width: 50px;
+				height: 20px;
 				border: 2px solid #E8E8ED;
 				text-align: center;
 				margin: 0 5px;
@@ -540,24 +567,25 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 				color: #FB1909;
 			}
 			.chat-item__add-btn {
-				background-color: #FB1909;
-				color: #ffffff;
+				background-color: #FFFFFF;
+				color: #FB1909;
 				border: none;
 				border-radius: 5px;
 				padding: 5px 10px;
 				cursor: pointer;
+				border: 1px solid #FB1909;
+				border-radius: 5px;
+				height: 28px;
+				margin: auto;
 			}
-		</style>
-		<script>
-			document.addEventListener('addToCart', function(e) {
-				const product = e.detail;
-				
-				// Notificar a Angular para usar el servicio de carrito
-				if (window.angularComponentRef) {
-					window.angularComponentRef.addToCart(product);
-				}
-			});
-		</script>`;
+			.chat-item__add-btn:hover {
+				background-color: #FB1909;
+				color: #FFFFFF;
+			}
+			.chat-item__add-btn:active {
+				background-color: #E01000;
+			}
+		</style>`;
 		
 		return html;
 	}
@@ -567,6 +595,45 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	private sanitizeMessage(message: string): SafeHtml {
 		return this.sanitizer.bypassSecurityTrustHtml(message);
+	}
+
+	// Mostrar una confirmación visual temporal cuando se agrega un producto al carrito
+	private showAddToCartConfirmation(productName: string): void {
+		// Crear elemento de confirmación
+		const confirmation = document.createElement('div');
+		confirmation.className = 'add-to-cart-confirmation';
+		confirmation.innerHTML = `
+			<div class="confirmation-content">
+				<i class="confirmation-icon">✓</i>
+				<span>¡${productName} agregado al carrito!</span>
+			</div>
+		`;
+		
+		// Estilos para la confirmación
+		confirmation.style.position = 'fixed';
+		confirmation.style.bottom = '20px';
+		confirmation.style.left = '50%';
+		confirmation.style.transform = 'translateX(-50%)';
+		confirmation.style.backgroundColor = '#4CAF50';
+		confirmation.style.color = 'white';
+		confirmation.style.padding = '10px 20px';
+		confirmation.style.borderRadius = '4px';
+		confirmation.style.zIndex = '1000';
+		confirmation.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+		confirmation.style.display = 'flex';
+		confirmation.style.alignItems = 'center';
+		confirmation.style.justifyContent = 'center';
+		confirmation.style.fontWeight = 'bold';
+		
+		// Agregar al DOM
+		document.body.appendChild(confirmation);
+		
+		// Quitar después de 3 segundos
+		setTimeout(() => {
+			if (confirmation.parentNode) {
+				document.body.removeChild(confirmation);
+			}
+		}, 3000);
 	}
 
 	/**
@@ -579,25 +646,37 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		// Divide el mensaje en líneas
 		const lines = message.split('\n');
 		
-		// 1. Buscar texto introductorio (antes de 'PRODUCTOS:')
+		// 1. Buscar texto introductorio (antes de la primera mención de producto)
 		let introText = '';
 		let i = 0;
-		while (i < lines.length && !lines[i].trim().match(/^PRODUCTOS:?$/i)) {
+		while (i < lines.length) {
+			// Si encontramos un producto o una etiqueta PRODUCTOS, terminar
+			if (lines[i].trim().match(/^PRODUCTOS?:?$/i) || 
+			    lines[i].trim().match(/^PRODUCTO:?$/i)) {
+				break;
+			}
+			
 			if (lines[i].trim() !== '') {
 				introText += lines[i] + '\n';
 			}
 			i++;
 		}
 		
-		// 2. Saltar todas las líneas de productos
+		// 2. Saltar todas las líneas de productos y sus etiquetas
 		while (i < lines.length) {
+			// Si la línea no tiene que ver con productos y no está vacía, es posible conclusión
 			if (!lines[i].match(/^-\s*Nombre:/i) && 
 				!lines[i].match(/^-\s*Precio:/i) && 
 				!lines[i].match(/^-\s*URL\s*imagen:/i) && 
-				!lines[i].trim().match(/^PRODUCTOS:?$/i) &&
+				!lines[i].trim().match(/^PRODUCTOS?:?$/i) &&
+				!lines[i].trim().match(/^PRODUCTO:?$/i) &&
 				lines[i].trim() !== '') {
-				// Si no es una línea relacionada con productos y no está vacía, asumimos que es el texto de conclusión
-				break;
+				// Verificamos si es una línea que separa productos o secciones
+				if (!lines[i].trim().match(/^-+$/) && // línea de guiones
+				    !lines[i].trim().match(/^\*+$/) && // línea de asteriscos
+				    !lines[i].trim().match(/^=+$/)) { // línea de iguales
+					break;
+				}
 			}
 			i++;
 		}
@@ -614,6 +693,10 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		// Eliminar líneas vacías al principio y al final
 		introText = introText.trim();
 		conclusionText = conclusionText.trim();
+		
+		console.log('Texto introductorio:', introText);
+		console.log('Productos encontrados:', products.length);
+		console.log('Texto de conclusión:', conclusionText);
 		
 		// Crear las tarjetas de productos
 		const productCardsHtml = this.createProductCardsHtml(products);
