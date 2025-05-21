@@ -182,8 +182,18 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		inactivityTimeout: any
 	): void {
 		this.reiniciarTemporizador(timeoutDuration, inactivityTimeout);
-		this.updateChatList();
-		this.updateLastChatMessage(message);
+		
+		// Detectar si es un mensaje que contiene productos
+		const products = this.extractProductsFromMessage(message);
+		if (products.length === 0) {
+			// Si no hay productos, seguir con el flujo normal
+			this.updateChatList();
+			this.updateLastChatMessage(message);
+		} else {
+			// Si hay productos, procesar y añadir como mensajes separados
+			this.processAndAddProductMessageParts(message, products);
+		}
+		
 		setTimeout(() => this.scrollToBottom(), 0);
 	}
 
@@ -195,9 +205,18 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	private updateLastChatMessage(message: string): void {
-		const formattedMessage = this.formatMessageAsList(message);
-		const sanitizeMessage = this.sanitizeMessage(formattedMessage);
-		this.chats[this.chats.length - 1].text = sanitizeMessage;
+		// Verificar si es un mensaje que contiene productos
+		const products = this.extractProductsFromMessage(message);
+		
+		if (products.length > 0) {
+			// Procesar mensaje con productos (dividido en 3 partes)
+			this.processAndAddProductMessageParts(message, products);
+		} else {
+			// Procesar mensaje normal
+			const formattedMessage = this.formatMessageAsList(message);
+			const sanitizeMessage = this.sanitizeMessage(formattedMessage);
+			this.chats[this.chats.length - 1].text = sanitizeMessage;
+		}
 	}
 
 	listenerWebSocket(): void {
@@ -286,30 +305,27 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	private formatMessageAsList(message: string): string {
-		console.log(message);
-		const lines = message.split('\n');
+		// Este método ahora solo procesa mensajes normales sin productos
+		// La lógica para mensajes con productos se ha movido a processProductMessage
 		
-		// Arrays para almacenar las líneas formateadas
+		// Si el mensaje contiene productos, manejar de forma especial
+		const products = this.extractProductsFromMessage(message);
+		if (products.length > 0) {
+			return this.processProductMessage(message, products);
+		}
+		
+		// Procesamiento normal para mensajes sin productos
+		const lines = message.split('\n');
 		const formattedListItems: string[] = [];
 		let isOrderedList = false;
-		
-		// Detectar productos en el mensaje
-		const products = this.extractProductsFromMessage(message);
-		
-		// Si hay productos, crear tarjetas de producto
-		if (products.length > 0) {
-			const productCardsHtml = this.createProductCardsHtml(products);
-			formattedListItems.push(productCardsHtml);
-		}
 		
 		// Procesar el resto del mensaje
 		lines.forEach((line) => {
 			const trimmedLine = line.trim();
 			// Saltarse las líneas que ya fueron procesadas como productos
-			if (trimmedLine.startsWith('- nombre:') || 
-				trimmedLine.startsWith('- precio:') || 
-				trimmedLine.startsWith('url_imagen:') ||
-				trimmedLine.startsWith('- url_imagen:')) {
+			if (trimmedLine.match(/^-\s*Nombre:/i) || 
+				trimmedLine.match(/^-\s*Precio:/i) || 
+				trimmedLine.match(/^-\s*URL\s*imagen:/i)) {
 				return;
 			}
 			
@@ -363,19 +379,24 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i].trim();
 			
-			if (line.startsWith('- nombre:')) {
+			// Comprobar diferentes formatos para el nombre del producto (mayúsculas/minúsculas)
+			if (line.match(/^-\s*Nombre:/i)) {
 				// Si ya estábamos procesando un producto, guardarlo y comenzar uno nuevo
 				if (Object.keys(currentProduct).length > 0) {
 					products.push({...currentProduct});
 					currentProduct = {};
 				}
 				
-				currentProduct.name = line.replace('- nombre:', '').trim();
-			} else if (line.startsWith('- precio:')) {
-				currentProduct.price = line.replace('- precio:', '').trim();
-			} else if (line.indexOf('url_imagen:') !== -1) {
-				// Extraer la URL de la imagen (puede estar en diferentes formatos)
-				const urlMatch = line.match(/url_imagen:\s*(https?:\/\/[^\s,]+)/i);
+				currentProduct.name = line.replace(/^-\s*Nombre:/i, '').trim();
+			} 
+			// Comprobar diferentes formatos para el precio (mayúsculas/minúsculas)
+			else if (line.match(/^-\s*Precio:/i)) {
+				currentProduct.price = line.replace(/^-\s*Precio:/i, '').trim();
+			} 
+			// Comprobar diferentes formatos para la URL de la imagen (mayúsculas/minúsculas)
+			else if (line.match(/^-\s*URL\s*imagen:/i)) {
+				// Extraer la URL de la imagen usando una expresión regular más general
+				const urlMatch = line.match(/(https?:\/\/[^\s]+)/i);
 				if (urlMatch && urlMatch[1]) {
 					currentProduct.imageUrl = urlMatch[1].trim();
 				}
@@ -393,11 +414,16 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 			products.push(currentProduct);
 		}
 		
+		console.log('Productos extraídos:', products);
 		return products;
 	}
 	
 	private createProductCardsHtml(products: any[]): string {
-		console.log(products);
+		console.log('Creando tarjetas para productos:', products);
+		if (!products || products.length === 0) {
+			console.warn('No hay productos para mostrar');
+			return '';
+		}
 		// Contenedor para todas las tarjetas de productos
 		let html = `<div class="product-grid">`;
 		
@@ -405,7 +431,7 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 		products.forEach((product, index) => {
 			html += `
 		<div class="chat-item">
-			<div class="chat-item__image"><img src="${product.imageUrl}" alt="${product.name}"></div>
+			<div class="chat-item__image"><img src="${product.imageUrl}" alt="${product.name}" style="max-width: 100%; max-height: 100px; object-fit: contain;"></div>
 			<div class="chat-item__details">
 				<div>
 					<div class="chat-item__brand-label">Marca</div>
@@ -415,14 +441,14 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 				<div class="chat-item__controls">
 					<div class="chat-item__quantity">
 						<button class="quantity-btn quantity-btn--minus">−</button>
-						<input type="text" value="3" class="quantity-input">
+						<input type="text" value="1" class="quantity-input">
 						<button class="quantity-btn quantity-btn--plus">+</button>
 					</div>
 					<div class="chat-item__price">${product.price}</div>
 				</div>
 			</div>
 			<div class="chat-item__delete"><a-logo ng-reflect-src="icons/trash.svg"><figure><img title="logo" src="icons/trash.svg"></figure></a-logo></div>
-			<button class="chat-item__add-btn">Agregar</button>
+			<button class="chat-item__add-btn" onclick="document.dispatchEvent(new CustomEvent('addToCart', { detail: {name: '${product.name}', price: '${product.price}', imageUrl: '${product.imageUrl}'} }))">Agregar</button>
 		</div>`;
 		});
 		
@@ -541,6 +567,130 @@ export class TModalComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	private sanitizeMessage(message: string): SafeHtml {
 		return this.sanitizer.bypassSecurityTrustHtml(message);
+	}
+
+	/**
+	 * Procesa un mensaje que contiene productos y lo divide en tres partes:
+	 * 1. Texto introductorio
+	 * 2. Tarjetas de productos
+	 * 3. Texto de conclusión
+	 */
+	private processAndAddProductMessageParts(message: string, products: any[]): void {
+		// Divide el mensaje en líneas
+		const lines = message.split('\n');
+		
+		// 1. Buscar texto introductorio (antes de 'PRODUCTOS:')
+		let introText = '';
+		let i = 0;
+		while (i < lines.length && !lines[i].trim().match(/^PRODUCTOS:?$/i)) {
+			if (lines[i].trim() !== '') {
+				introText += lines[i] + '\n';
+			}
+			i++;
+		}
+		
+		// 2. Saltar todas las líneas de productos
+		while (i < lines.length) {
+			if (!lines[i].match(/^-\s*Nombre:/i) && 
+				!lines[i].match(/^-\s*Precio:/i) && 
+				!lines[i].match(/^-\s*URL\s*imagen:/i) && 
+				!lines[i].trim().match(/^PRODUCTOS:?$/i) &&
+				lines[i].trim() !== '') {
+				// Si no es una línea relacionada con productos y no está vacía, asumimos que es el texto de conclusión
+				break;
+			}
+			i++;
+		}
+		
+		// 3. El resto es el texto de conclusión
+		let conclusionText = '';
+		while (i < lines.length) {
+			if (lines[i].trim() !== '') {
+				conclusionText += lines[i] + '\n';
+			}
+			i++;
+		}
+		
+		// Eliminar líneas vacías al principio y al final
+		introText = introText.trim();
+		conclusionText = conclusionText.trim();
+		
+		// Crear las tarjetas de productos
+		const productCardsHtml = this.createProductCardsHtml(products);
+		
+		// Añadir cada parte como un mensaje separado
+		if (introText) {
+			this.chats.push({
+				text: this.sanitizeMessage(introText),
+				isUser: false
+			});
+		}
+		
+		// Añadir las tarjetas de productos
+		this.chats.push({
+			text: this.sanitizeMessage(productCardsHtml),
+			isUser: false
+		});
+		
+		// Añadir el texto de conclusión si existe
+		if (conclusionText) {
+			this.chats.push({
+				text: this.sanitizeMessage(conclusionText),
+				isUser: false
+			});
+		}
+	}
+	
+	/**
+	 * Procesa un mensaje que contiene productos y devuelve el HTML formateado
+	 * Este método se usa cuando se necesita formatear un mensaje completo sin dividirlo
+	 */
+	private processProductMessage(message: string, products: any[]): string {
+		// Crear las tarjetas de productos
+		const productCardsHtml = this.createProductCardsHtml(products);
+		
+		// Dividir el mensaje en partes: antes y después de los productos
+		const lines = message.split('\n');
+		let beforeProducts = '';
+		let afterProducts = '';
+		let foundProducts = false;
+		
+		for (const line of lines) {
+			// Si encontramos un marcador de productos, activar la bandera
+			if (line.trim().match(/^PRODUCTOS:?$/i)) {
+				foundProducts = true;
+				continue;
+			}
+			
+			// Si es una línea de producto, saltarla
+			if (line.match(/^-\s*Nombre:/i) || 
+				line.match(/^-\s*Precio:/i) || 
+				line.match(/^-\s*URL\s*imagen:/i)) {
+				continue;
+			}
+			
+			// Si no hemos llegado a productos todavía, agregar a beforeProducts
+			if (!foundProducts) {
+				beforeProducts += line + '\n';
+			} else {
+				// Si ya pasamos los productos, y no es una línea de producto, es contenido posterior
+				afterProducts += line + '\n';
+			}
+		}
+		
+		// Construir el mensaje final
+		let formattedMessage = '';
+		if (beforeProducts.trim() !== '') {
+			formattedMessage += beforeProducts.trim() + '\n\n';
+		}
+		
+		formattedMessage += productCardsHtml;
+		
+		if (afterProducts.trim() !== '') {
+			formattedMessage += '\n\n' + afterProducts.trim();
+		}
+		
+		return formattedMessage;
 	}
 
 
